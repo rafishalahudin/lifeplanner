@@ -373,7 +373,7 @@ export default function LifePlanner() {
   if(activeTab==='habits') return <HabitsTab/>
 
   return (
-    <div style={{ margin:'-28px -28px -40px', background:'var(--bg)', minHeight:'calc(100vh - 68px)', fontFamily:"'Inter',sans-serif" }}>
+    <div style={{ margin: isMobile ? '-14px -14px -40px' : '-28px -28px -40px', background:'var(--bg)', minHeight:'calc(100vh - 68px)', fontFamily:"'Inter',sans-serif" }}>
 
       {/* ══ HEADER ══ */}
       <div style={{ padding: isMobile ? '20px 16px 16px' : '36px 44px 24px', background:'white', borderBottom:'1px solid var(--border)' }}>
@@ -431,7 +431,7 @@ export default function LifePlanner() {
       </div>
 
       {/* ══ DAILY PROGRESS PANEL ══ */}
-      <div style={{ margin: isMobile ? '16px 14px 0' : '20px 44px 0', background:'white', borderRadius:'18px', border:'1px solid var(--border)', boxShadow:'var(--shadow)', overflow:'hidden' }}>
+      <div style={{ margin: isMobile ? '16px 16px 0' : '20px 44px 0', background:'white', borderRadius:'18px', border:'1px solid var(--border)', boxShadow:'var(--shadow)', overflow:'hidden' }}>
         <div style={{ padding:'16px 24px', borderBottom:'1px solid var(--border)', display:'flex', alignItems:'center', gap:'8px' }}>
           <CalendarCheck size={15} color={progressColor} strokeWidth={2}/>
           <span style={{ fontWeight:700, fontSize:'13px', color:'var(--text)' }}>Progress Harian</span>
@@ -493,7 +493,7 @@ export default function LifePlanner() {
       </div>
 
       {/* ══ CARDS GRID ══ */}
-      <div style={{ padding: isMobile ? '14px 14px 24px' : '20px 44px 44px' }}>
+      <div style={{ padding: isMobile ? '16px 16px 24px' : '20px 44px 44px' }}>
         {plans.length === 0 ? (
           <div style={{ textAlign:'center', paddingTop:'60px', paddingBottom:'60px', background:'white', borderRadius:'18px', border:'1px solid var(--border)' }}>
             <div style={{ width:'52px', height:'52px', borderRadius:'14px', background:'var(--bg)', border:'1px solid var(--border)', display:'flex', alignItems:'center', justifyContent:'center', margin:'0 auto 14px' }}>

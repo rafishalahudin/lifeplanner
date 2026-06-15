@@ -265,7 +265,7 @@ export default function Journal() {
   const MODAL_SECTIONS = ['Perasaan', 'Pikiran', 'Reframing', 'Pagi & Gratitude']
 
   return (
-    <div style={{ margin:'-28px -28px -40px', minHeight:'calc(100vh - 68px)', background:C.bg, display:'flex', flexDirection:'column', fontFamily:'inherit' }}>
+    <div style={{ margin: isMobile ? '-14px -14px -40px' : '-28px -28px -40px', minHeight:'calc(100vh - 68px)', background:C.bg, display:'flex', flexDirection:'column', fontFamily:'inherit' }}>
 
       {/* ══ HEADER ══ */}
       <div style={{ padding: isMobile ? '20px 16px 0' : '36px 40px 0', background:'white', borderBottom:`1px solid ${C.border}`, position:'relative', overflow:'hidden' }}>
@@ -425,7 +425,7 @@ export default function Journal() {
         ) : (
 
           /* Card grid */
-          <div style={{ flex:1, padding: isMobile ? '16px 14px' : '28px 40px', overflowY:'auto' }}>
+          <div style={{ flex:1, padding: isMobile ? '16px 16px' : '28px 40px', overflowY:'auto' }}>
             {/* Toolbar row */}
             <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:'20px' }}>
               <span style={{ fontSize:'13px', color:C.textMuted, fontWeight:500 }}>
@@ -458,7 +458,7 @@ export default function Journal() {
 
       {/* ── Timeline ── */}
       {tab==='timeline' && (
-        <div style={{ flex:1, padding: isMobile ? '16px 14px' : '32px 40px', overflowY:'auto' }}>
+        <div style={{ flex:1, padding: isMobile ? '16px 16px' : '32px 40px', overflowY:'auto' }}>
           {all.length===0 ? (
             <div style={{ textAlign:'center', paddingTop:'80px', color:C.textMuted }}>
               <Moon size={48} color={C.border} style={{ marginBottom:'16px' }}/>
@@ -508,7 +508,7 @@ export default function Journal() {
 
       {/* ── Mood Chart ── */}
       {tab==='mood' && (
-        <div style={{ flex:1, padding: isMobile ? '16px 14px' : '32px 40px', overflowY:'auto' }}>
+        <div style={{ flex:1, padding: isMobile ? '16px 16px' : '32px 40px', overflowY:'auto' }}>
           <h2 style={{ fontSize:'20px', fontWeight:800, color:C.text, marginBottom:'24px' }}>Mood Tracker</h2>
 
           {all.length===0 ? (
