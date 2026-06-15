@@ -405,7 +405,7 @@ export default function Dashboard() {
           {/* ── Quick focus: input + task list combined ── */}
           <div style={{ background:'white', borderRadius:'18px', border:'1px solid var(--border)', boxShadow:'var(--shadow)', overflow:'hidden' }}>
             {/* Header */}
-            <div style={{ padding:'14px 16px 10px', borderBottom:'1px solid var(--border-light)', background:'linear-gradient(135deg,rgba(0,113,227,0.04),transparent)' }}>
+            <div style={{ position:'relative', padding:'14px 16px 10px', borderBottom:'1px solid var(--border-light)', background:'linear-gradient(135deg,rgba(0,113,227,0.04),transparent)' }}>
               <div style={{ position:'absolute', top:0, left:0, right:0, height:'2px', background:'linear-gradient(90deg,var(--accent),#34C759)', borderRadius:'18px 18px 0 0' }}/>
               <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between' }}>
                 <div style={{ display:'flex', alignItems:'center', gap:'7px' }}>

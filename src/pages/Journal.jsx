@@ -403,20 +403,22 @@ export default function Journal() {
             </button>
 
             {/* Feature cards */}
-            <div style={{ display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:'12px', maxWidth:'520px' }}>
+            <div style={{ display:'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(3,1fr)', gap:'10px', width: isMobile ? '100%' : undefined, maxWidth: isMobile ? '360px' : '520px' }}>
               {[
                 { Icon:MessageCircle, color:C.accent,  title:'Pikiran & Situasi', desc:'Dokumentasikan yang ada di pikiranmu' },
                 { Icon:Heart,         color:'#FF3B30', title:'Emosi & Perasaan',  desc:'Kenali dan ekspresikan perasaanmu'   },
                 { Icon:RefreshCw,     color:'#30D158', title:'Reframing & CBT',   desc:'Ubah perspektif jadi lebih positif'  },
               ].map(({ Icon, color, title, desc })=>(
-                <div key={title} onClick={openNew} style={{ background:C.surface, border:`1px solid ${C.border}`, borderRadius:'16px', padding:'18px', textAlign:'center', boxShadow:C.shadow, cursor:'pointer', transition:'all 0.2s' }}
+                <div key={title} onClick={openNew} style={{ background:C.surface, border:`1px solid ${C.border}`, borderRadius:'14px', padding: isMobile ? '14px 16px' : '18px', textAlign: isMobile ? 'left' : 'center', boxShadow:C.shadow, cursor:'pointer', transition:'all 0.2s', display:'flex', flexDirection: isMobile ? 'row' : 'column', alignItems: isMobile ? 'center' : 'stretch', gap: isMobile ? '14px' : '0' }}
                   onMouseEnter={e=>{ e.currentTarget.style.boxShadow=`0 6px 20px ${color}20`; e.currentTarget.style.borderColor=`${color}40`; e.currentTarget.style.transform='translateY(-2px)' }}
                   onMouseLeave={e=>{ e.currentTarget.style.boxShadow=C.shadow; e.currentTarget.style.borderColor=C.border; e.currentTarget.style.transform='' }}>
-                  <div style={{ width:'42px', height:'42px', borderRadius:'12px', background:`${color}12`, border:`1px solid ${color}22`, display:'flex', alignItems:'center', justifyContent:'center', margin:'0 auto 12px' }}>
-                    <Icon size={19} color={color} strokeWidth={1.75}/>
+                  <div style={{ width: isMobile ? '36px' : '42px', height: isMobile ? '36px' : '42px', borderRadius:'12px', background:`${color}12`, border:`1px solid ${color}22`, display:'flex', alignItems:'center', justifyContent:'center', margin: isMobile ? '0' : '0 auto 12px', flexShrink:0 }}>
+                    <Icon size={isMobile ? 16 : 19} color={color} strokeWidth={1.75}/>
                   </div>
-                  <div style={{ fontSize:'13px', fontWeight:700, color:C.text, marginBottom:'4px' }}>{title}</div>
-                  <div style={{ fontSize:'11.5px', color:C.textMuted, lineHeight:'1.5' }}>{desc}</div>
+                  <div>
+                    <div style={{ fontSize:'13px', fontWeight:700, color:C.text, marginBottom:'2px' }}>{title}</div>
+                    <div style={{ fontSize:'11.5px', color:C.textMuted, lineHeight:'1.5' }}>{desc}</div>
+                  </div>
                 </div>
               ))}
             </div>
