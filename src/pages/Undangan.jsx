@@ -315,18 +315,29 @@ export default function Undangan() {
     else { audioRef.current.play().then(() => setPlaying(true)).catch(() => {}) }
   }
 
+  const supportsFullscreen = 'requestFullscreen' in document.documentElement ||
+    'webkitRequestFullscreen' in document.documentElement
+
   const toggleFullscreen = () => {
-    if (!document.fullscreenElement) {
-      document.documentElement.requestFullscreen().then(() => setIsFullscreen(true)).catch(() => {})
+    const el = document.documentElement
+    const isFullNow = !!(document.fullscreenElement || document.webkitFullscreenElement)
+    if (!isFullNow) {
+      const req = el.requestFullscreen || el.webkitRequestFullscreen
+      if (req) req.call(el).then(() => setIsFullscreen(true)).catch(() => {})
     } else {
-      document.exitFullscreen().then(() => setIsFullscreen(false)).catch(() => {})
+      const exit = document.exitFullscreen || document.webkitExitFullscreen
+      if (exit) exit.call(document).then(() => setIsFullscreen(false)).catch(() => {})
     }
   }
 
   useEffect(() => {
-    const h = () => setIsFullscreen(!!document.fullscreenElement)
+    const h = () => setIsFullscreen(!!(document.fullscreenElement || document.webkitFullscreenElement))
     document.addEventListener('fullscreenchange', h)
-    return () => document.removeEventListener('fullscreenchange', h)
+    document.addEventListener('webkitfullscreenchange', h)
+    return () => {
+      document.removeEventListener('fullscreenchange', h)
+      document.removeEventListener('webkitfullscreenchange', h)
+    }
   }, [])
 
   useEffect(() => () => { audioRef.current?.pause() }, [])
@@ -582,22 +593,41 @@ export default function Undangan() {
         </Sec>
 
         {/* ══ 3. VERSE ════════════════════════════════ */}
-        <Sec style={{ padding:'72px 28px 64px', textAlign:'center', justifyContent:'center' }}>
-          <div style={{ position:'absolute', inset:0,
-            background:'radial-gradient(ellipse 80% 60% at 50% 50%, rgba(201,168,76,0.04) 0%, transparent 70%)' }}/>
+        <Sec style={{ padding:'80px 28px 72px', textAlign:'center', justifyContent:'center' }}>
+          {/* Atmospheric layered background */}
+          <div style={{ position:'absolute', inset:0, overflow:'hidden', pointerEvents:'none' }}>
+            {/* Primary warm golden glow — upper center */}
+            <div style={{ position:'absolute', top:'28%', left:'50%', transform:'translate(-50%,-50%)',
+              width:'420px', height:'300px', borderRadius:'50%',
+              background:'rgba(201,168,76,0.18)', filter:'blur(55px)' }}/>
+            {/* Secondary subtle glow — lower area */}
+            <div style={{ position:'absolute', bottom:'20%', left:'50%', transform:'translateX(-50%)',
+              width:'200px', height:'120px', borderRadius:'50%',
+              background:'rgba(201,168,76,0.07)', filter:'blur(35px)' }}/>
+            {/* Edge vignette for depth */}
+            <div style={{ position:'absolute', inset:0,
+              background:'radial-gradient(ellipse 120% 100% at 50% 50%, transparent 42%, rgba(0,0,0,0.6) 100%)' }}/>
+            {/* Top & bottom thin gold lines */}
+            <div style={{ position:'absolute', top:0, left:'10%', right:'10%', height:'1px',
+              background:`linear-gradient(90deg, transparent, ${D.gold}30, transparent)` }}/>
+            <div style={{ position:'absolute', bottom:0, left:'10%', right:'10%', height:'1px',
+              background:`linear-gradient(90deg, transparent, ${D.gold}25, transparent)` }}/>
+          </div>
+          <Particles count={14}/>
           <FadeIn style={{ zIndex:1, width:'100%', maxWidth:'440px', display:'flex', flexDirection:'column', alignItems:'center' }}>
-            <div style={{ color:D.gold, fontSize:'12px', letterSpacing:'10px', marginBottom:'40px', opacity:.6 }}>
-              ◆ &nbsp; ◆ &nbsp; ◆
+            <div style={{ color:D.gold, fontSize:'10px', letterSpacing:'10px', marginBottom:'36px', opacity:.75 }}>
+              ✦ &nbsp;&nbsp; ✦ &nbsp;&nbsp; ✦
             </div>
-            <p style={{ color:`${D.gold}80`, fontSize:'12px', letterSpacing:'3px',
-              textTransform:'uppercase', margin:'0 0 32px', opacity:.8 }}>QS. Ar-Rum : 21</p>
-            <p style={{ maxWidth:'380px', fontSize:'19px', lineHeight:'2.1', color:D.cream,
-              fontStyle:'italic', fontWeight:300, margin:'0 auto 24px' }}>
+            <p style={{ color:D.gold, fontSize:'11px', letterSpacing:'4px',
+              textTransform:'uppercase', margin:'0 0 28px' }}>QS. Ar-Rum : 21</p>
+            <p style={{ maxWidth:'370px', fontSize:'18px', lineHeight:'2.15', color:D.cream,
+              fontStyle:'italic', fontWeight:300, margin:'0 auto 28px',
+              textShadow:'0 1px 12px rgba(0,0,0,0.5)' }}>
               "Dan di antara tanda-tanda kekuasaan-Nya ialah Dia menciptakan untukmu
               pasangan-pasangan dari jenismu sendiri, supaya kamu cenderung dan merasa
               tenteram kepadanya, dan dijadikan-Nya di antaramu rasa kasih dan sayang."
             </p>
-            <GLine my={36} width="160px"/>
+            <GLine my={32} width="160px"/>
             <PF size={44} italic style={{ color:D.gold, marginTop:'8px' }}>Bride &amp; Groom</PF>
           </FadeIn>
           <ScrollNext/>
@@ -609,17 +639,25 @@ export default function Undangan() {
             display:'flex', flexDirection:'column', justifyContent:'flex-end' }}>
             <div style={{ position:'absolute', inset:0,
               backgroundImage:`url('${IMG('bride.png')}')`, backgroundSize:'cover', backgroundPosition:'center top',
-              filter:'brightness(0.55) saturate(0.85)' }}/>
+              filter:'brightness(0.58) saturate(0.85)' }}/>
             <div style={{ position:'absolute', inset:0,
-              background:'linear-gradient(0deg, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.5) 40%, rgba(0,0,0,0.05) 70%)' }}/>
-            <div style={{ position:'relative', zIndex:1, padding:'0 28px 52px', textAlign:'center' }}>
-              <div style={{ color:D.gold, fontSize:'11px', letterSpacing:'5px', textTransform:'uppercase',
-                marginBottom:'14px', opacity:.7 }}>Mempelai Wanita</div>
-              <PF size={58} italic style={{ color:D.white, marginBottom:'12px', textShadow:'0 2px 20px rgba(0,0,0,0.8)' }}>{W.brideFirst}</PF>
-              <GLine my={14} width="100px"/>
-              <div style={{ fontSize:'15px', fontWeight:600, color:D.cream, letterSpacing:'2px',
-                textTransform:'uppercase', marginBottom:'10px' }}>{W.brideFull}</div>
-              <div style={{ fontSize:'14px', color:D.creamM, lineHeight:'1.8', maxWidth:'300px', margin:'0 auto 32px' }}>{W.brideParent}</div>
+              background:'linear-gradient(180deg, #0C0C0C 0%, rgba(12,12,12,0.7) 12%, rgba(0,0,0,0.05) 35%, rgba(0,0,0,0.55) 62%, rgba(0,0,0,0.92) 100%)' }}/>
+            <div style={{ position:'relative', zIndex:1, padding:'0 20px 48px', textAlign:'center' }}>
+              <div style={{
+                background:'rgba(0,0,0,0.42)', backdropFilter:'blur(14px)',
+                WebkitBackdropFilter:'blur(14px)',
+                border:`1px solid ${D.gold}22`, borderRadius:'20px',
+                padding:'22px 24px 26px', position:'relative', marginBottom:'20px',
+              }}>
+                <Corners size={12} opacity="38" inset={10}/>
+                <div style={{ color:D.gold, fontSize:'10px', letterSpacing:'5px', textTransform:'uppercase',
+                  marginBottom:'12px' }}>Mempelai Wanita</div>
+                <PF size={56} italic style={{ color:D.white, marginBottom:'8px', textShadow:'0 2px 16px rgba(0,0,0,0.9)' }}>{W.brideFirst}</PF>
+                <GLine my={12} width="90px"/>
+                <div style={{ fontSize:'13px', fontWeight:700, color:D.cream, letterSpacing:'2.5px',
+                  textTransform:'uppercase', marginBottom:'8px' }}>{W.brideFull}</div>
+                <div style={{ fontSize:'14px', color:D.cream, lineHeight:'1.7', maxWidth:'280px', margin:'0 auto' }}>{W.brideParent}</div>
+              </div>
               <ScrollNext/>
             </div>
           </div>
@@ -654,17 +692,25 @@ export default function Undangan() {
             display:'flex', flexDirection:'column', justifyContent:'flex-end' }}>
             <div style={{ position:'absolute', inset:0,
               backgroundImage:`url('${IMG('groom.png')}')`, backgroundSize:'cover', backgroundPosition:'center top',
-              filter:'brightness(0.5) saturate(0.8)' }}/>
+              filter:'brightness(0.55) saturate(0.8)' }}/>
             <div style={{ position:'absolute', inset:0,
-              background:'linear-gradient(0deg, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.5) 40%, rgba(0,0,0,0.05) 70%)' }}/>
-            <div style={{ position:'relative', zIndex:1, padding:'0 28px 52px', textAlign:'center' }}>
-              <div style={{ color:D.gold, fontSize:'11px', letterSpacing:'5px', textTransform:'uppercase',
-                marginBottom:'14px', opacity:.7 }}>Mempelai Pria</div>
-              <PF size={58} italic style={{ color:D.white, marginBottom:'12px', textShadow:'0 2px 20px rgba(0,0,0,0.8)' }}>{W.groomFirst}</PF>
-              <GLine my={14} width="100px"/>
-              <div style={{ fontSize:'15px', fontWeight:600, color:D.cream, letterSpacing:'2px',
-                textTransform:'uppercase', marginBottom:'10px' }}>{W.groomFull}</div>
-              <div style={{ fontSize:'14px', color:D.creamM, lineHeight:'1.8', maxWidth:'300px', margin:'0 auto 32px' }}>{W.groomParent}</div>
+              background:'linear-gradient(180deg, #0C0C0C 0%, rgba(12,12,12,0.7) 12%, rgba(0,0,0,0.05) 35%, rgba(0,0,0,0.55) 62%, rgba(0,0,0,0.92) 100%)' }}/>
+            <div style={{ position:'relative', zIndex:1, padding:'0 20px 48px', textAlign:'center' }}>
+              <div style={{
+                background:'rgba(0,0,0,0.42)', backdropFilter:'blur(14px)',
+                WebkitBackdropFilter:'blur(14px)',
+                border:`1px solid ${D.gold}22`, borderRadius:'20px',
+                padding:'22px 24px 26px', position:'relative', marginBottom:'20px',
+              }}>
+                <Corners size={12} opacity="38" inset={10}/>
+                <div style={{ color:D.gold, fontSize:'10px', letterSpacing:'5px', textTransform:'uppercase',
+                  marginBottom:'12px' }}>Mempelai Pria</div>
+                <PF size={56} italic style={{ color:D.white, marginBottom:'8px', textShadow:'0 2px 16px rgba(0,0,0,0.9)' }}>{W.groomFirst}</PF>
+                <GLine my={12} width="90px"/>
+                <div style={{ fontSize:'13px', fontWeight:700, color:D.cream, letterSpacing:'2.5px',
+                  textTransform:'uppercase', marginBottom:'8px' }}>{W.groomFull}</div>
+                <div style={{ fontSize:'14px', color:D.cream, lineHeight:'1.7', maxWidth:'280px', margin:'0 auto' }}>{W.groomParent}</div>
+              </div>
               <ScrollNext/>
             </div>
           </div>
@@ -715,28 +761,33 @@ export default function Undangan() {
             <p style={{ color:`${D.gold}70`, fontSize:'10px', letterSpacing:'6px',
               textTransform:'uppercase', margin:'0 0 10px' }}>Perjalanan Kita</p>
             <PF size={44} italic style={{ color:D.white, marginBottom:'10px' }}>Our Story</PF>
-            <p style={{ color:`${D.creamM}60`, fontSize:'14px', fontStyle:'italic',
-              margin:'0 0 40px', lineHeight:1.6 }}>
+            <p style={{ color:D.cream, fontSize:'15px', fontStyle:'italic',
+              margin:'0 0 40px', lineHeight:1.7 }}>
               Karena cinta tidak datang sekaligus — ia tumbuh, perlahan, indah.
             </p>
             <div style={{ width:'100%' }}>
-              {W.story.map(({ year, emoji, title, desc }, i) => (
+              {W.story.map(({ year, title, desc }, i) => (
                 <FadeIn key={year} delay={i * 100}>
                   <div style={{ display:'flex', gap:'0', alignItems:'stretch' }}>
                     <div style={{ display:'flex', flexDirection:'column', alignItems:'center',
-                      flexShrink:0, width:'32px', marginRight:'16px' }}>
-                      <div style={{ fontSize:'20px', lineHeight:1, marginTop:'1px', flexShrink:0 }}>{emoji}</div>
+                      flexShrink:0, width:'28px', marginRight:'18px' }}>
+                      <div style={{ width:'22px', height:'22px', display:'flex', alignItems:'center',
+                        justifyContent:'center', flexShrink:0, marginTop:'3px' }}>
+                        <div style={{ width:'7px', height:'7px', background:D.gold,
+                          transform:'rotate(45deg)', opacity:.9,
+                          boxShadow:`0 0 6px ${D.gold}40` }}/>
+                      </div>
                       {i < W.story.length - 1 && (
-                        <div style={{ flex:1, width:'1px', minHeight:'20px', marginTop:'6px',
-                          background:`linear-gradient(180deg, ${D.gold}35, ${D.gold}08)` }}/>
+                        <div style={{ flex:1, width:'1px', minHeight:'20px', marginTop:'4px',
+                          background:`linear-gradient(180deg, ${D.gold}50, ${D.gold}08)` }}/>
                       )}
                     </div>
-                    <div style={{ flex:1, textAlign:'left', paddingBottom: i < W.story.length-1 ? '26px' : 0 }}>
-                      <div style={{ fontSize:'10px', color:`${D.gold}65`, letterSpacing:'3px',
-                        textTransform:'uppercase', marginBottom:'3px' }}>{year}</div>
-                      <div style={{ fontSize:'17px', fontWeight:600, color:D.cream,
-                        marginBottom:'5px', letterSpacing:'.2px' }}>{title}</div>
-                      <div style={{ fontSize:'13.5px', color:`${D.creamM}85`, lineHeight:'1.8',
+                    <div style={{ flex:1, textAlign:'left', paddingBottom: i < W.story.length-1 ? '28px' : 0 }}>
+                      <div style={{ fontSize:'10px', color:D.gold, letterSpacing:'4px',
+                        textTransform:'uppercase', marginBottom:'5px' }}>{year}</div>
+                      <div style={{ fontSize:'17px', fontWeight:700, color:D.white,
+                        marginBottom:'7px', letterSpacing:'.2px' }}>{title}</div>
+                      <div style={{ fontSize:'15px', color:D.cream, lineHeight:'1.9',
                         fontStyle:'italic' }}>{desc}</div>
                     </div>
                   </div>
@@ -745,7 +796,7 @@ export default function Undangan() {
             </div>
             <FadeIn delay={420} style={{ width:'100%', textAlign:'center', marginTop:'36px' }}>
               <GLine my={0} width="80px"/>
-              <p style={{ color:`${D.gold}75`, fontSize:'15px', fontStyle:'italic',
+              <p style={{ color:D.gold, fontSize:'15px', fontStyle:'italic',
                 margin:'20px 0 0', lineHeight:'1.8' }}>
                 Dan sekarang, kami siap memulai babak baru bersama. 💛
               </p>
@@ -755,19 +806,16 @@ export default function Undangan() {
         </Sec>
 
         {/* ══ 8. EVENTS ═══════════════════════════════ */}
-        <Sec style={{ padding:'56px 20px 64px', justifyContent:'center' }}>
+        <Sec style={{ padding:'36px 20px 44px', justifyContent:'center' }}>
           <div style={{ position:'absolute', inset:0,
             background:'radial-gradient(ellipse 80% 60% at 50% 50%, rgba(201,168,76,0.03) 0%, transparent 70%)' }}/>
-          <FadeIn style={{ textAlign:'center', zIndex:1, marginBottom:'44px', width:'100%' }}>
-            <div style={{ color:`${D.gold}50`, fontSize:'13px', letterSpacing:'8px', marginBottom:'18px' }}>
-              ◆ &nbsp; ◆ &nbsp; ◆
-            </div>
-            <p style={{ color:`${D.gold}70`, fontSize:'10px', letterSpacing:'6px',
-              textTransform:'uppercase', margin:'0 0 12px' }}>Turut Mengundang</p>
+          <FadeIn style={{ textAlign:'center', zIndex:1, marginBottom:'28px', width:'100%' }}>
+            <p style={{ color:`${D.gold}90`, fontSize:'10px', letterSpacing:'6px',
+              textTransform:'uppercase', margin:'0 0 10px' }}>Turut Mengundang</p>
             <PF size={44} italic style={{ color:D.white, lineHeight:1 }}>Hari Istimewa</PF>
-            <div style={{ display:'flex', alignItems:'center', gap:'10px', margin:'20px auto 0', width:'160px' }}>
+            <div style={{ display:'flex', alignItems:'center', gap:'10px', margin:'16px auto 0', width:'140px' }}>
               <div style={{ flex:1, height:'.5px', background:`linear-gradient(90deg,transparent,${D.gold}60)` }}/>
-              <span style={{ color:`${D.gold}80`, fontSize:'12px' }}>✦</span>
+              <span style={{ color:`${D.gold}90`, fontSize:'12px' }}>✦</span>
               <div style={{ flex:1, height:'.5px', background:`linear-gradient(90deg,${D.gold}60,transparent)` }}/>
             </div>
           </FadeIn>
@@ -776,54 +824,55 @@ export default function Undangan() {
             { label:'Resepsi',    roman:'II', ...W.resepsi },
           ].map(({ label, roman, time, venue, addr }, i) => (
             <FadeIn key={label} delay={i * 140} style={{ width:'100%', maxWidth:'420px', zIndex:1,
-              marginBottom: i === 0 ? '24px' : 0 }}>
+              marginBottom: i === 0 ? '16px' : 0 }}>
               <div style={{
-                padding:'36px 32px', textAlign:'center',
+                padding:'24px 22px', textAlign:'center',
                 background:`linear-gradient(145deg, rgba(201,168,76,0.07) 0%, rgba(20,20,20,0.95) 60%)`,
-                border:`1px solid ${D.gold}35`, borderRadius:'20px',
+                border:`1px solid ${D.gold}40`, borderRadius:'18px',
                 position:'relative', overflow:'hidden',
               }}>
-                <Corners size={14} opacity="55" inset={12}/>
+                <Corners size={14} opacity="55" inset={10}/>
                 <div style={{ position:'absolute', top:0, left:'20%', right:'20%', height:'1px',
                   background:`linear-gradient(90deg, transparent, ${D.gold}70, transparent)` }}/>
-                <div style={{ display:'flex', alignItems:'center', gap:'10px', justifyContent:'center', marginBottom:'20px' }}>
-                  <div style={{ flex:1, height:'.5px', background:`linear-gradient(90deg,transparent,${D.gold}45)` }}/>
-                  <span style={{ fontSize:'10px', color:`${D.gold}95`, letterSpacing:'5px', textTransform:'uppercase' }}>
+                <div style={{ display:'flex', alignItems:'center', gap:'10px', justifyContent:'center', marginBottom:'16px' }}>
+                  <div style={{ flex:1, height:'.5px', background:`linear-gradient(90deg,transparent,${D.gold}50)` }}/>
+                  <span style={{ fontSize:'10px', color:D.gold, letterSpacing:'5px', textTransform:'uppercase' }}>
                     {roman} &nbsp;·&nbsp; {label}
                   </span>
-                  <div style={{ flex:1, height:'.5px', background:`linear-gradient(90deg,${D.gold}45,transparent)` }}/>
+                  <div style={{ flex:1, height:'.5px', background:`linear-gradient(90deg,${D.gold}50,transparent)` }}/>
                 </div>
-                <div style={{ color:`${D.gold}60`, fontSize:'18px', letterSpacing:'10px', marginBottom:'16px' }}>◆</div>
-                <div style={{ fontFamily:"'Playfair Display',serif", fontSize: isMobile ? '34px' : '40px',
-                  fontWeight:400, color:D.white, lineHeight:1, marginBottom:'22px', letterSpacing:'-0.5px' }}>
+                <div style={{ color:`${D.gold}85`, fontSize:'15px', letterSpacing:'10px', marginBottom:'12px' }}>◆</div>
+                <div style={{ fontFamily:"'Playfair Display',serif", fontSize: isMobile ? '32px' : '40px',
+                  fontWeight:400, color:D.white, lineHeight:1.1, marginBottom:'16px', letterSpacing:'-0.5px',
+                  textShadow:'0 1px 12px rgba(0,0,0,0.6)' }}>
                   {time}
                 </div>
-                <div style={{ display:'flex', alignItems:'center', gap:'8px', justifyContent:'center', margin:'0 auto 22px' }}>
-                  <div style={{ width:'32px', height:'.5px', background:`linear-gradient(90deg,transparent,${D.gold}55)` }}/>
-                  <div style={{ width:'4px', height:'4px', borderRadius:'50%', background:`${D.gold}70` }}/>
-                  <div style={{ width:'32px', height:'.5px', background:`linear-gradient(90deg,${D.gold}55,transparent)` }}/>
+                <div style={{ display:'flex', alignItems:'center', gap:'8px', justifyContent:'center', margin:'0 auto 16px' }}>
+                  <div style={{ width:'32px', height:'.5px', background:`linear-gradient(90deg,transparent,${D.gold}60)` }}/>
+                  <div style={{ width:'4px', height:'4px', borderRadius:'50%', background:`${D.gold}80` }}/>
+                  <div style={{ width:'32px', height:'.5px', background:`linear-gradient(90deg,${D.gold}60,transparent)` }}/>
                 </div>
-                <div style={{ fontSize:'15px', fontWeight:600, color:D.cream, letterSpacing:'.5px', marginBottom:'6px' }}>{venue}</div>
-                <div style={{ fontSize:'12.5px', color:`${D.creamM}80`, lineHeight:'1.7', marginBottom:'6px' }}>{addr}</div>
-                <div style={{ fontSize:'11px', color:`${D.gold}65`, letterSpacing:'2.5px',
-                  textTransform:'uppercase', marginBottom:'24px' }}>{W.dateStr}</div>
-                <div style={{ display:'flex', alignItems:'center', gap:'8px', justifyContent:'center', marginBottom:'20px' }}>
-                  <div style={{ width:'24px', height:'.5px', background:`${D.gold}35` }}/>
-                  <div style={{ width:'3px', height:'3px', borderRadius:'50%', background:`${D.gold}50` }}/>
-                  <div style={{ width:'24px', height:'.5px', background:`${D.gold}35` }}/>
+                <div style={{ fontSize:'15px', fontWeight:700, color:D.white, letterSpacing:'.5px', marginBottom:'5px' }}>{venue}</div>
+                <div style={{ fontSize:'13px', color:D.creamM, lineHeight:'1.7', marginBottom:'6px' }}>{addr}</div>
+                <div style={{ fontSize:'11px', color:`${D.gold}95`, letterSpacing:'2.5px',
+                  textTransform:'uppercase', marginBottom:'18px' }}>{W.dateStr}</div>
+                <div style={{ display:'flex', alignItems:'center', gap:'8px', justifyContent:'center', marginBottom:'16px' }}>
+                  <div style={{ width:'24px', height:'.5px', background:`${D.gold}45` }}/>
+                  <div style={{ width:'3px', height:'3px', borderRadius:'50%', background:`${D.gold}60` }}/>
+                  <div style={{ width:'24px', height:'.5px', background:`${D.gold}45` }}/>
                 </div>
                 <button style={{ background:'transparent', border:'none', padding:0,
                   fontFamily:"'Cormorant Garamond',serif", fontSize:'13px',
-                  color:`${D.gold}75`, letterSpacing:'2.5px', textTransform:'uppercase',
-                  cursor:'pointer', display:'inline-flex', alignItems:'center', gap:'8px', transition:'color .2s' }}
-                  onMouseEnter={e=>e.currentTarget.style.color=D.gold}
-                  onMouseLeave={e=>e.currentTarget.style.color=`${D.gold}75`}
+                  color:D.gold, letterSpacing:'2.5px', textTransform:'uppercase',
+                  cursor:'pointer', display:'inline-flex', alignItems:'center', gap:'8px', transition:'opacity .2s' }}
+                  onMouseEnter={e=>e.currentTarget.style.opacity='.7'}
+                  onMouseLeave={e=>e.currentTarget.style.opacity='1'}
                 >
                   <MapPin size={11} strokeWidth={1.5}/>Open Maps
                   <span style={{ fontSize:'15px', lineHeight:1 }}>→</span>
                 </button>
                 <div style={{ position:'absolute', bottom:0, left:'20%', right:'20%', height:'1px',
-                  background:`linear-gradient(90deg, transparent, ${D.gold}40, transparent)` }}/>
+                  background:`linear-gradient(90deg, transparent, ${D.gold}45, transparent)` }}/>
               </div>
             </FadeIn>
           ))}
@@ -832,38 +881,59 @@ export default function Undangan() {
 
         {/* ══ 9. SAVE THE DATE ════════════════════════ */}
         <Sec style={{ padding:'64px 24px 56px', minHeight:'calc(100vh - 110px)', justifyContent:'center', textAlign:'center' }}>
-          <div style={{ position:'absolute', inset:0,
-            background:'radial-gradient(ellipse 70% 50% at 50% 50%, rgba(201,168,76,0.03) 0%, transparent 70%)' }}/>
+          {/* Atmospheric layered background */}
+          <div style={{ position:'absolute', inset:0, overflow:'hidden', pointerEvents:'none' }}>
+            <div style={{ position:'absolute', top:'18%', left:'50%', transform:'translate(-50%,-50%)',
+              width:'380px', height:'260px', borderRadius:'50%',
+              background:'rgba(201,168,76,0.17)', filter:'blur(55px)' }}/>
+            <div style={{ position:'absolute', bottom:'18%', left:'50%', transform:'translateX(-50%)',
+              width:'200px', height:'120px', borderRadius:'50%',
+              background:'rgba(201,168,76,0.06)', filter:'blur(35px)' }}/>
+            <div style={{ position:'absolute', inset:0,
+              background:'radial-gradient(ellipse 110% 100% at 50% 50%, transparent 44%, rgba(0,0,0,0.62) 100%)' }}/>
+            <div style={{ position:'absolute', top:0, left:'8%', right:'8%', height:'1px',
+              background:`linear-gradient(90deg, transparent, ${D.gold}35, transparent)` }}/>
+            <div style={{ position:'absolute', bottom:0, left:'8%', right:'8%', height:'1px',
+              background:`linear-gradient(90deg, transparent, ${D.gold}28, transparent)` }}/>
+          </div>
+          <Particles count={12}/>
           <FadeIn style={{ zIndex:1, width:'100%', display:'flex', flexDirection:'column', alignItems:'center' }}>
-            <PF size={48} italic style={{ color:D.gold, marginBottom:'6px' }}>Save the Date</PF>
-            <p style={{ color:`${D.creamM}70`, fontSize:'13px', letterSpacing:'1px',
+            <div style={{ color:D.gold, fontSize:'10px', letterSpacing:'8px', marginBottom:'28px', opacity:.7 }}>✦ &nbsp; ✦ &nbsp; ✦</div>
+            <PF size={48} italic style={{ color:D.gold, marginBottom:'8px' }}>Save the Date</PF>
+            <p style={{ color:D.cream, fontSize:'13px', letterSpacing:'1px',
               fontStyle:'italic', margin:'0 0 36px' }}>{W.dateStr} · Gedung Bea Cukai Jakarta</p>
-            <div style={{ display:'flex', alignItems:'stretch', width:'100%', maxWidth:'380px', margin:'0 auto 44px' }}>
-              {[{ v:cd.days, l:'Hari' },{ v:cd.hours, l:'Jam' },{ v:cd.minutes, l:'Menit' },{ v:cd.seconds, l:'Detik' }]
-                .map(({ v, l }, i) => (
-                <div key={l} style={{ flex:1, textAlign:'center',
-                  borderLeft: i > 0 ? `1px solid rgba(255,255,255,0.08)` : 'none', padding:'0 4px' }}>
-                  <div style={{ fontSize:'10px', color:`${D.gold}70`, letterSpacing:'3px',
-                    textTransform:'uppercase', marginBottom:'10px' }}>{l}</div>
-                  <div style={{ fontFamily:"'Playfair Display',serif", fontSize:'52px',
-                    fontWeight:300, color:D.white, lineHeight:1, letterSpacing:'-2px' }}>
-                    {String(v).padStart(2,'0')}
+            {/* Countdown card */}
+            <div style={{ width:'100%', maxWidth:'360px', background:'rgba(0,0,0,0.35)',
+              border:`1px solid ${D.gold}25`, borderRadius:'20px', padding:'28px 20px',
+              position:'relative', marginBottom:'32px', backdropFilter:'blur(12px)' }}>
+              <Corners size={12} opacity="40" inset={10}/>
+              <div style={{ display:'flex', alignItems:'stretch', width:'100%' }}>
+                {[{ v:cd.days, l:'Hari' },{ v:cd.hours, l:'Jam' },{ v:cd.minutes, l:'Menit' },{ v:cd.seconds, l:'Detik' }]
+                  .map(({ v, l }, i) => (
+                  <div key={l} style={{ flex:1, textAlign:'center',
+                    borderLeft: i > 0 ? `1px solid ${D.gold}18` : 'none', padding:'0 2px' }}>
+                    <div style={{ fontSize:'9px', color:D.gold, letterSpacing:'3px',
+                      textTransform:'uppercase', marginBottom:'8px' }}>{l}</div>
+                    <div style={{ fontFamily:"'Playfair Display',serif", fontSize:'48px',
+                      fontWeight:300, color:D.white, lineHeight:1, letterSpacing:'-2px' }}>
+                      {String(v).padStart(2,'0')}
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
-            <div style={{ width:'100%', maxWidth:'380px', height:'.5px', margin:'0 auto 32px',
-              background:`linear-gradient(90deg, transparent, ${D.gold}40, transparent)` }}/>
-            <button style={{ background:'transparent', border:'none', padding:'0',
+            <GLine my={0} width="100px"/>
+            <button style={{ background:'transparent', border:'none', padding:'12px 32px',
               fontFamily:"'Cormorant Garamond',serif", fontSize:'13px',
-              color:`${D.gold}80`, letterSpacing:'3px', textTransform:'uppercase',
-              cursor:'pointer', display:'inline-flex', alignItems:'center', gap:'10px', transition:'color .2s' }}
-              onMouseEnter={e=>e.currentTarget.style.color=D.gold}
-              onMouseLeave={e=>e.currentTarget.style.color=`${D.gold}80`}
+              color:D.gold, letterSpacing:'3px', textTransform:'uppercase',
+              cursor:'pointer', display:'inline-flex', alignItems:'center', gap:'10px',
+              transition:'opacity .2s', marginTop:'24px' }}
+              onMouseEnter={e=>e.currentTarget.style.opacity='.65'}
+              onMouseLeave={e=>e.currentTarget.style.opacity='1'}
             >
-              <span style={{ display:'inline-block', width:'24px', height:'.5px', background:'currentColor', marginBottom:'1px' }}/>
+              <span style={{ display:'inline-block', width:'20px', height:'.5px', background:'currentColor', marginBottom:'1px' }}/>
               Add to Calendar
-              <span style={{ display:'inline-block', width:'24px', height:'.5px', background:'currentColor', marginBottom:'1px' }}/>
+              <span style={{ display:'inline-block', width:'20px', height:'.5px', background:'currentColor', marginBottom:'1px' }}/>
             </button>
           </FadeIn>
           <ScrollNext/>
@@ -959,64 +1029,70 @@ export default function Undangan() {
         </Sec>
 
         {/* ══ 11. WEDDING WISH ════════════════════════ */}
-        <Sec style={{ padding:'64px 24px 56px', justifyContent:'center' }}>
-          <div style={{ position:'absolute', inset:0,
-            background:'radial-gradient(ellipse 70% 50% at 50% 50%, rgba(201,168,76,0.03) 0%, transparent 70%)' }}/>
-          <FadeIn style={{ zIndex:1, width:'100%', display:'flex', flexDirection:'column', alignItems:'center' }}>
-            <p style={{ color:`${D.gold}70`, fontSize:'10px', letterSpacing:'6px',
+        <Sec style={{ padding:'64px 32px 56px', justifyContent:'center' }}>
+          <div style={{ position:'absolute', inset:0, overflow:'hidden', pointerEvents:'none' }}>
+            <div style={{ position:'absolute', top:'25%', left:'50%', transform:'translate(-50%,-50%)',
+              width:'300px', height:'200px', borderRadius:'50%',
+              background:'rgba(201,168,76,0.1)', filter:'blur(50px)' }}/>
+            <div style={{ position:'absolute', inset:0,
+              background:'radial-gradient(ellipse 110% 100% at 50% 50%, transparent 50%, rgba(0,0,0,0.5) 100%)' }}/>
+          </div>
+          <FadeIn style={{ zIndex:1, width:'100%', maxWidth:'420px', display:'flex', flexDirection:'column', alignItems:'center' }}>
+            <p style={{ color:D.gold, fontSize:'10px', letterSpacing:'6px',
               textTransform:'uppercase', margin:'0 0 10px' }}>Titipkan Doa</p>
             <PF size={48} italic style={{ color:D.gold, marginBottom:'0' }}>Wedding Wish</PF>
             <GLine my={20} width="120px"/>
 
-            <div style={{ width:'100%', maxWidth:'480px', marginBottom:'28px' }}>
+            <div style={{ width:'100%', marginBottom:'24px' }}>
               <textarea value={wishText} onChange={e=>setWishText(e.target.value)}
                 placeholder="Tulis doa & harapanmu untuk Rafi & Harista..."
-                rows={3}
+                rows={4}
                 style={{
                   width:'100%', padding:'18px 20px', borderRadius:'16px',
-                  border:`1px solid ${D.gold}${wishText ? '45' : '18'}`,
-                  background:'rgba(255,255,255,0.025)', color:D.cream,
-                  fontFamily:"'Cormorant Garamond', Georgia, serif", fontSize:'15px',
+                  border:`1px solid ${D.gold}${wishText ? '50' : '22'}`,
+                  background:'rgba(255,255,255,0.04)', color:D.cream,
+                  fontFamily:"'Cormorant Garamond', Georgia, serif", fontSize:'16px',
                   lineHeight:'1.7', resize:'none', outline:'none', boxSizing:'border-box',
-                  transition:'border-color .3s',
+                  transition:'border-color .3s', textAlign:'center',
                 }}
-                onFocus={e => e.target.style.borderColor=`${D.gold}55`}
-                onBlur={e => e.target.style.borderColor=wishText ? `${D.gold}45` : `${D.gold}18`}
+                onFocus={e => e.target.style.borderColor=`${D.gold}65`}
+                onBlur={e => e.target.style.borderColor=wishText ? `${D.gold}50` : `${D.gold}22`}
               />
-              <button onClick={sendWish} style={{
-                display:'block', width:'100%', padding:'13px',
-                background: wishText.trim() ? 'rgba(201,168,76,0.08)' : 'transparent',
-                color: wishText.trim() ? D.gold : `${D.creamM}35`,
-                border: wishText.trim() ? `1.5px solid ${D.gold}55` : `1px solid rgba(255,255,255,0.07)`,
-                borderRadius:'99px', marginTop:'10px',
-                fontFamily:"'Cormorant Garamond', serif", fontSize:'15px', letterSpacing:'2px',
-                cursor: wishText.trim() ? 'pointer' : 'default', transition:'all .25s',
-                textTransform:'uppercase',
-              }}>
-                Kirim Doa 🤲
-              </button>
+              <div style={{ display:'flex', justifyContent:'center', marginTop:'14px' }}>
+                <button onClick={sendWish} style={{
+                  padding:'12px 40px', borderRadius:'99px',
+                  background: wishText.trim() ? 'rgba(201,168,76,0.1)' : 'transparent',
+                  color: wishText.trim() ? D.gold : `${D.creamM}35`,
+                  border: wishText.trim() ? `1.5px solid ${D.gold}60` : `1px solid rgba(255,255,255,0.08)`,
+                  fontFamily:"'Cormorant Garamond', serif", fontSize:'14px', letterSpacing:'2.5px',
+                  cursor: wishText.trim() ? 'pointer' : 'default', transition:'all .25s',
+                  textTransform:'uppercase',
+                }}>
+                  Kirim Doa 🤲
+                </button>
+              </div>
             </div>
 
-            <div style={{ width:'100%', maxWidth:'480px', display:'flex', flexDirection:'column', gap:'10px' }}>
+            <div style={{ width:'100%', display:'flex', flexDirection:'column', gap:'10px' }}>
               {wishes.map((w,i)=>(
-                <div key={i} style={{ padding:'16px 20px', borderRadius:'14px',
-                  background:D.bgCard,
-                  border:`1px solid ${D.gold}12`,
-                  borderLeft:`2.5px solid ${D.gold}50`,
+                <div key={i} style={{ padding:'18px 20px', borderRadius:'16px',
+                  background:'rgba(20,20,20,0.9)',
+                  border:`1px solid ${D.gold}18`,
+                  borderLeft:`2.5px solid ${D.gold}55`,
                   textAlign:'left' }}>
-                  <div style={{ display:'flex', alignItems:'center', gap:'10px', marginBottom:'6px' }}>
-                    <div style={{ width:'26px', height:'26px', borderRadius:'50%', flexShrink:0,
-                      background:`linear-gradient(135deg, ${D.gold}28, ${D.gold}0A)`,
-                      border:`1px solid ${D.gold}35`,
+                  <div style={{ display:'flex', alignItems:'center', gap:'10px', marginBottom:'8px' }}>
+                    <div style={{ width:'28px', height:'28px', borderRadius:'50%', flexShrink:0,
+                      background:`linear-gradient(135deg, rgba(201,168,76,0.22), rgba(201,168,76,0.06))`,
+                      border:`1px solid ${D.gold}40`,
                       display:'flex', alignItems:'center', justifyContent:'center',
-                      fontSize:'11px', color:D.gold, fontWeight:700 }}>
+                      fontSize:'12px', color:D.gold, fontWeight:700 }}>
                       {w.name[0]}
                     </div>
                     <span style={{ fontSize:'14px', fontWeight:700, color:D.gold }}>{w.name}</span>
-                    <span style={{ fontSize:'11px', color:`${D.creamM}45`, marginLeft:'auto' }}>{w.time}</span>
+                    <span style={{ fontSize:'11px', color:`${D.creamM}65`, marginLeft:'auto' }}>{w.time}</span>
                   </div>
-                  <p style={{ fontSize:'14.5px', color:`${D.creamM}90`, lineHeight:'1.75',
-                    margin:'0', paddingLeft:'36px' }}>{w.msg}</p>
+                  <p style={{ fontSize:'15px', color:D.cream, lineHeight:'1.8',
+                    margin:'0', paddingLeft:'38px' }}>{w.msg}</p>
                 </div>
               ))}
             </div>
@@ -1127,19 +1203,21 @@ export default function Undangan() {
                   style={{ animation:'inv-spin 4s linear infinite', flexShrink:0 }}/>
             }
           </div>
-          {/* Fullscreen */}
-          <div onClick={toggleFullscreen} style={{
-            width:'44px', height:'44px', borderRadius:'50%',
-            background:'#1A1A1A', border:`1px solid ${D.gold}${isFullscreen ? '70' : '25'}`,
-            display:'flex', alignItems:'center', justifyContent:'center',
-            boxShadow:'0 2px 16px rgba(0,0,0,0.5)',
-            cursor:'pointer', transition:'border-color .3s',
-          }} title={isFullscreen ? 'Keluar fullscreen' : 'Fullscreen'}>
-            {isFullscreen
-              ? <Minimize size={14} color={D.gold} strokeWidth={1.5}/>
-              : <Maximize size={14} color={`${D.gold}BB`} strokeWidth={1.5}/>
-            }
-          </div>
+          {/* Fullscreen — only shown when API is available (not iOS Safari) */}
+          {supportsFullscreen && (
+            <div onClick={toggleFullscreen} style={{
+              width:'44px', height:'44px', borderRadius:'50%',
+              background:'#1A1A1A', border:`1px solid ${D.gold}${isFullscreen ? '70' : '25'}`,
+              display:'flex', alignItems:'center', justifyContent:'center',
+              boxShadow:'0 2px 16px rgba(0,0,0,0.5)',
+              cursor:'pointer', transition:'border-color .3s',
+            }} title={isFullscreen ? 'Keluar fullscreen' : 'Fullscreen'}>
+              {isFullscreen
+                ? <Minimize size={14} color={D.gold} strokeWidth={1.5}/>
+                : <Maximize size={14} color={`${D.gold}BB`} strokeWidth={1.5}/>
+              }
+            </div>
+          )}
         </div>
       )}
 
