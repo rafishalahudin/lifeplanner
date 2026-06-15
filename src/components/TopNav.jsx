@@ -50,8 +50,13 @@ export default function TopNav() {
 
   return (
     <header className="topnav">
-      <NavLink to="/dashboard" className="nav-logo">
-        <img src="/logo-rafi.png" alt="Rafi" style={{ height:'36px', width:'auto', display:'block' }} />
+      <NavLink to="/dashboard" className="nav-logo" style={{ display:'flex', alignItems:'center', gap:'8px', textDecoration:'none' }}>
+        <div style={{ width:'30px', height:'30px', borderRadius:'9px', background:'var(--accent)', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
+          <TrendingUp size={15} color="white" strokeWidth={2.5}/>
+        </div>
+        <span style={{ fontSize:'15px', fontWeight:800, color:'var(--text)', letterSpacing:'-0.3px', whiteSpace:'nowrap' }}>
+          Rafi's Life Planner
+        </span>
       </NavLink>
 
       <nav className="nav-links">
