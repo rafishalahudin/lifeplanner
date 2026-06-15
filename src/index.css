@@ -227,6 +227,16 @@ a { text-decoration: none; color: inherit; }
   padding: 28px 28px 40px;
 }
 
+/* ── Undangan fullscreen mode ── */
+.app-shell--undangan {
+  padding: 0 !important;
+}
+.page-content--undangan {
+  padding: 0 !important;
+  overflow-y: auto;
+  flex: 1;
+}
+
 /* ── Cards ── */
 .card {
   background: var(--card);
@@ -1077,6 +1087,9 @@ textarea { resize: vertical; min-height: 100px; line-height: 1.7; }
   /* ── Page content ── */
   .page-content {
     padding: 52px 14px calc(68px + env(safe-area-inset-bottom, 0px)) !important;
+  }
+  .page-content--undangan {
+    padding: 0 !important;
   }
 
   /* ── Utility helpers ── */

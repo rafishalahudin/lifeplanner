@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
-import { MapPin, ChevronDown, Music, Pause, ChevronLeft, ChevronRight, Maximize, Minimize } from 'lucide-react'
+import { MapPin, ChevronDown, Music, Pause, ChevronLeft, ChevronRight, Maximize, Minimize, Home } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
 import { useLocalStorage } from '../hooks/useLocalStorage'
 import { useIsMobile } from '../hooks/useIsMobile'
 
@@ -281,6 +282,7 @@ export default function Undangan() {
   }, [])
 
   const isMobile = useIsMobile()
+  const navigate = useNavigate()
   const audioRef = useRef(null)
   const [playing,      setPlaying]      = useState(false)
   const [opened,       setOpened]       = useState(false)
@@ -394,9 +396,28 @@ export default function Undangan() {
   )
 
   return (
-    <div style={{ margin:'-4px', fontFamily:"'Cormorant Garamond', Georgia, serif" }}>
+    <div style={{ fontFamily:"'Cormorant Garamond', Georgia, serif" }}>
 
       {heartOverlay}
+
+      {/* ── Home shortcut button ─────────────────────── */}
+      <div onClick={() => navigate('/dashboard')} style={{
+        position:'fixed', top:`calc(14px + env(safe-area-inset-top, 0px))`, left:'14px',
+        zIndex:9999, display:'flex', alignItems:'center', gap:'6px',
+        background:'rgba(0,0,0,0.52)', backdropFilter:'blur(14px)',
+        WebkitBackdropFilter:'blur(14px)',
+        border:`1px solid ${D.gold}28`, borderRadius:'99px',
+        padding:'8px 14px 8px 10px', cursor:'pointer',
+        fontFamily:"'Cormorant Garamond', serif", fontSize:'13px',
+        color:`${D.gold}CC`, letterSpacing:'1px',
+        transition:'opacity .2s',
+      }}
+        onMouseEnter={e => e.currentTarget.style.opacity='.75'}
+        onMouseLeave={e => e.currentTarget.style.opacity='1'}
+      >
+        <Home size={13} strokeWidth={1.8} color={D.gold}/>
+        Home
+      </div>
 
       {/* ── Opening overlay ────────────────────────────── */}
       {opening && (
@@ -430,7 +451,7 @@ export default function Undangan() {
 
       {/* ══ 1. COVER ══════════════════════════════════ */}
       {!isMobile ? (
-        <div style={{ display:'flex', minHeight:'calc(100vh - 56px)', background:D.bg }}>
+        <div style={{ display:'flex', minHeight:'100svh', background:D.bg }}>
           <div style={{ width:'33.333%', position:'relative', flexShrink:0, overflow:'hidden' }}>
             <img src={IMG('cover3.jpg')} alt=""
               style={{ position:'absolute', inset:0, width:'100%', height:'100%',
@@ -479,7 +500,7 @@ export default function Undangan() {
         </div>
 
       ) : (
-        <div style={{ position:'relative', overflow:'hidden', minHeight:'calc(100vh - 110px)',
+        <div style={{ position:'relative', overflow:'hidden', minHeight:'100svh',
           display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center' }}>
           <img src={IMG('cover3.jpg')} alt=""
             style={{ position:'absolute', inset:0, width:'100%', height:'100%',
@@ -635,7 +656,7 @@ export default function Undangan() {
 
         {/* ══ 4. BRIDE ════════════════════════════════ */}
         {isMobile ? (
-          <div style={{ position:'relative', overflow:'hidden', minHeight:'calc(100vh - 110px)',
+          <div style={{ position:'relative', overflow:'hidden', minHeight:'100svh',
             display:'flex', flexDirection:'column', justifyContent:'flex-end' }}>
             <div style={{ position:'absolute', inset:0,
               backgroundImage:`url('${IMG('bride.png')}')`, backgroundSize:'cover', backgroundPosition:'center top',
@@ -662,7 +683,7 @@ export default function Undangan() {
             </div>
           </div>
         ) : (
-          <div style={{ display:'flex', minHeight:'calc(100vh - 56px)', background:D.bg }}>
+          <div style={{ display:'flex', minHeight:'100svh', background:D.bg }}>
             <div style={{ width:'33.333%', position:'relative', flexShrink:0, overflow:'hidden' }}>
               <div style={{ position:'absolute', inset:0, backgroundImage:`url('${IMG('bride.png')}')`,
                 backgroundSize:'cover', backgroundPosition:'center top', filter:'brightness(0.65) saturate(0.85)' }}/>
@@ -688,7 +709,7 @@ export default function Undangan() {
 
         {/* ══ 5. GROOM ════════════════════════════════ */}
         {isMobile ? (
-          <div style={{ position:'relative', overflow:'hidden', minHeight:'calc(100vh - 110px)',
+          <div style={{ position:'relative', overflow:'hidden', minHeight:'100svh',
             display:'flex', flexDirection:'column', justifyContent:'flex-end' }}>
             <div style={{ position:'absolute', inset:0,
               backgroundImage:`url('${IMG('groom.png')}')`, backgroundSize:'cover', backgroundPosition:'center top',
@@ -715,7 +736,7 @@ export default function Undangan() {
             </div>
           </div>
         ) : (
-          <div style={{ display:'flex', minHeight:'calc(100vh - 56px)', background:D.bg }}>
+          <div style={{ display:'flex', minHeight:'100svh', background:D.bg }}>
             <div style={{ width:'33.333%', position:'relative', flexShrink:0, overflow:'hidden' }}>
               <div style={{ position:'absolute', inset:0, backgroundImage:`url('${IMG('groom.png')}')`,
                 backgroundSize:'cover', backgroundPosition:'center top', filter:'brightness(0.6) saturate(0.8)' }}/>
@@ -880,7 +901,7 @@ export default function Undangan() {
         </Sec>
 
         {/* ══ 9. SAVE THE DATE ════════════════════════ */}
-        <Sec style={{ padding:'64px 24px 56px', minHeight:'calc(100vh - 110px)', justifyContent:'center', textAlign:'center' }}>
+        <Sec style={{ padding:'64px 24px 56px', minHeight:'100svh', justifyContent:'center', textAlign:'center' }}>
           {/* Atmospheric layered background */}
           <div style={{ position:'absolute', inset:0, overflow:'hidden', pointerEvents:'none' }}>
             <div style={{ position:'absolute', top:'18%', left:'50%', transform:'translate(-50%,-50%)',

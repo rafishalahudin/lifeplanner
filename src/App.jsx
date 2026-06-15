@@ -1,4 +1,4 @@
-import { Routes, Route, Navigate } from 'react-router-dom'
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import { Settings } from 'lucide-react'
 import TopNav from './components/TopNav'
 import BottomNav from './components/BottomNav'
@@ -10,11 +10,14 @@ import Finance from './pages/Finance'
 import Undangan from './pages/Undangan'
 
 export default function App() {
+  const location = useLocation()
+  const isUndangan = location.pathname === '/undangan'
+
   return (
-    <div className="app-shell">
+    <div className={`app-shell${isUndangan ? ' app-shell--undangan' : ''}`}>
       <div className="app-container">
-        <TopNav />
-        <div className="page-content">
+        {!isUndangan && <TopNav />}
+        <div className={`page-content${isUndangan ? ' page-content--undangan' : ''}`}>
           <Routes>
             <Route path="/" element={<Navigate to="/dashboard" replace />} />
             <Route path="/dashboard" element={<Dashboard />} />
@@ -26,7 +29,7 @@ export default function App() {
             <Route path="/settings" element={<SettingsPage />} />
           </Routes>
         </div>
-        <BottomNav />
+        {!isUndangan && <BottomNav />}
       </div>
     </div>
   )
