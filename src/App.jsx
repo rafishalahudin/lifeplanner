@@ -7,6 +7,7 @@ import WeddingPlanner from './pages/WeddingPlanner'
 import LifePlanner from './pages/LifePlanner'
 import Journal from './pages/Journal'
 import Finance from './pages/Finance'
+import Undangan from './pages/Undangan'
 
 export default function App() {
   return (
@@ -21,6 +22,7 @@ export default function App() {
             <Route path="/life" element={<LifePlanner />} />
             <Route path="/journal" element={<Journal />} />
             <Route path="/finance" element={<Finance />} />
+            <Route path="/undangan" element={<Undangan />} />
             <Route path="/settings" element={<SettingsPage />} />
           </Routes>
         </div>

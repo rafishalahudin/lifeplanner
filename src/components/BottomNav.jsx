@@ -1,14 +1,15 @@
 import { NavLink } from 'react-router-dom'
-import { LayoutDashboard, Heart, Target, BookOpen, Settings, Wallet } from 'lucide-react'
+import { LayoutDashboard, Heart, Target, BookOpen, Settings, Wallet, Mail } from 'lucide-react'
 import { useIsMobile } from '../hooks/useIsMobile'
 
 const NAV = [
-  { to: '/dashboard', label: 'Home',     icon: LayoutDashboard },
-  { to: '/wedding',   label: 'Wedding',  icon: Heart           },
-  { to: '/life',      label: 'Life',     icon: Target          },
-  { to: '/journal',   label: 'Journal',  icon: BookOpen        },
-  { to: '/finance',   label: 'Finance',  icon: Wallet          },
-  { to: '/settings',  label: 'Settings', icon: Settings        },
+  { to: '/dashboard', label: 'Home',      icon: LayoutDashboard },
+  { to: '/wedding',   label: 'Wedding',   icon: Heart           },
+  { to: '/undangan',  label: 'Undangan',  icon: Mail            },
+  { to: '/life',      label: 'Life',      icon: Target          },
+  { to: '/journal',   label: 'Journal',   icon: BookOpen        },
+  { to: '/finance',   label: 'Finance',   icon: Wallet          },
+  { to: '/settings',  label: 'Settings',  icon: Settings        },
 ]
 
 export default function BottomNav() {

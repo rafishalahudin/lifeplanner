@@ -1,15 +1,16 @@
 import { NavLink } from 'react-router-dom'
-import { LayoutDashboard, Heart, Target, BookOpen, Settings, Search, Bell, User, Wallet, TrendingUp } from 'lucide-react'
+import { LayoutDashboard, Heart, Target, BookOpen, Settings, Search, Bell, User, Wallet, TrendingUp, Mail } from 'lucide-react'
 import PomodoroTimer from './PomodoroTimer'
 import { useIsMobile } from '../hooks/useIsMobile'
 
 const NAV = [
-  { to: '/dashboard', label: 'Home',     icon: LayoutDashboard },
-  { to: '/wedding',   label: 'Wedding',  icon: Heart           },
-  { to: '/life',      label: 'Activity', icon: Target          },
-  { to: '/journal',   label: 'Journal',  icon: BookOpen        },
-  { to: '/finance',   label: 'Finance',  icon: Wallet          },
-  { to: '/settings',  label: 'Settings', icon: Settings        },
+  { to: '/dashboard', label: 'Home',      icon: LayoutDashboard },
+  { to: '/wedding',   label: 'Wedding',   icon: Heart           },
+  { to: '/undangan',  label: 'Undangan',  icon: Mail            },
+  { to: '/life',      label: 'Activity',  icon: Target          },
+  { to: '/journal',   label: 'Journal',   icon: BookOpen        },
+  { to: '/finance',   label: 'Finance',   icon: Wallet          },
+  { to: '/settings',  label: 'Settings',  icon: Settings        },
 ]
 
 export default function TopNav() {
