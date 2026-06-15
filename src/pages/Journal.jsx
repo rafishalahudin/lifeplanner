@@ -265,7 +265,7 @@ export default function Journal() {
   const MODAL_SECTIONS = ['Perasaan', 'Pikiran', 'Reframing', 'Pagi & Gratitude']
 
   return (
-    <div style={{ margin: isMobile ? '-14px -14px -40px' : '-28px -28px -40px', minHeight:'calc(100vh - 68px)', background:C.bg, display:'flex', flexDirection:'column', fontFamily:'inherit' }}>
+    <div style={{ margin: isMobile ? '0 -14px -40px' : '-28px -28px -40px', minHeight:'calc(100vh - 68px)', background:C.bg, display:'flex', flexDirection:'column', fontFamily:'inherit' }}>
 
       {/* ══ HEADER ══ */}
       <div style={{ padding: isMobile ? '20px 16px 0' : '36px 40px 0', background:'white', borderBottom:`1px solid ${C.border}`, position:'relative', overflow:'hidden' }}>

@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom'
-import { LayoutDashboard, Heart, Target, BookOpen, Settings, Search, Bell, User, Wallet } from 'lucide-react'
+import { LayoutDashboard, Heart, Target, BookOpen, Settings, Search, Bell, User, Wallet, TrendingUp } from 'lucide-react'
 import PomodoroTimer from './PomodoroTimer'
 import { useIsMobile } from '../hooks/useIsMobile'
 
@@ -18,18 +18,32 @@ export default function TopNav() {
   if (isMobile) {
     return (
       <header className="topnav-mobile">
-        {NAV.map(({ to, label, icon: Icon }) => (
-          <NavLink
-            key={to}
-            to={to}
-            className={({ isActive }) => `nav-mobile-link${isActive ? ' active' : ''}`}
-          >
-            <div className="nav-icon-wrap">
-              <Icon size={20} strokeWidth={1.9}/>
-            </div>
-            <span>{label}</span>
-          </NavLink>
-        ))}
+        {/* App title */}
+        <NavLink to="/dashboard" style={{ display:'flex', alignItems:'center', gap:'8px', textDecoration:'none', flexShrink:0 }}>
+          <div style={{ width:'28px', height:'28px', borderRadius:'8px', background:'var(--accent)', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
+            <TrendingUp size={14} color="white" strokeWidth={2.5}/>
+          </div>
+          <span style={{ fontSize:'15px', fontWeight:800, color:'var(--text)', letterSpacing:'-0.3px', whiteSpace:'nowrap' }}>
+            Rafi's Life Planner
+          </span>
+        </NavLink>
+
+        {/* Nav icons */}
+        <div style={{ display:'flex', alignItems:'center', gap:'2px' }}>
+          {NAV.map(({ to, icon: Icon }) => (
+            <NavLink key={to} to={to}
+              style={({ isActive }) => ({
+                width:'34px', height:'34px', borderRadius:'9px',
+                display:'flex', alignItems:'center', justifyContent:'center',
+                color: isActive ? 'var(--accent)' : '#86868B',
+                background: isActive ? 'rgba(0,113,227,0.1)' : 'transparent',
+                textDecoration: 'none', flexShrink: 0,
+                transition: 'all 0.15s',
+              })}>
+              <Icon size={18} strokeWidth={1.9}/>
+            </NavLink>
+          ))}
+        </div>
       </header>
     )
   }

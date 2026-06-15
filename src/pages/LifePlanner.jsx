@@ -373,7 +373,7 @@ export default function LifePlanner() {
   if(activeTab==='habits') return <HabitsTab/>
 
   return (
-    <div style={{ margin: isMobile ? '-14px -14px -40px' : '-28px -28px -40px', background:'var(--bg)', minHeight:'calc(100vh - 68px)', fontFamily:"'Inter',sans-serif" }}>
+    <div style={{ margin: isMobile ? '0 -14px -40px' : '-28px -28px -40px', background:'var(--bg)', minHeight:'calc(100vh - 68px)', fontFamily:"'Inter',sans-serif" }}>
 
       {/* ══ HEADER ══ */}
       <div style={{ padding: isMobile ? '20px 16px 16px' : '36px 44px 24px', background:'white', borderBottom:'1px solid var(--border)' }}>
