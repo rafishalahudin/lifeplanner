@@ -1,6 +1,7 @@
 import { Routes, Route, Navigate } from 'react-router-dom'
 import { Settings } from 'lucide-react'
 import TopNav from './components/TopNav'
+import BottomNav from './components/BottomNav'
 import Dashboard from './pages/Dashboard'
 import WeddingPlanner from './pages/WeddingPlanner'
 import LifePlanner from './pages/LifePlanner'
@@ -23,6 +24,7 @@ export default function App() {
             <Route path="/settings" element={<SettingsPage />} />
           </Routes>
         </div>
+        <BottomNav />
       </div>
     </div>
   )

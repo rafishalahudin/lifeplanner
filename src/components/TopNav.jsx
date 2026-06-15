@@ -28,22 +28,20 @@ export default function TopNav() {
           </span>
         </NavLink>
 
-        {/* Nav icons */}
-        <div style={{ display:'flex', alignItems:'center', gap:'2px' }}>
-          {NAV.map(({ to, icon: Icon }) => (
-            <NavLink key={to} to={to}
-              style={({ isActive }) => ({
-                width:'34px', height:'34px', borderRadius:'9px',
-                display:'flex', alignItems:'center', justifyContent:'center',
-                color: isActive ? 'var(--accent)' : '#86868B',
-                background: isActive ? 'rgba(0,113,227,0.1)' : 'transparent',
-                textDecoration: 'none', flexShrink: 0,
-                transition: 'all 0.15s',
-              })}>
-              <Icon size={18} strokeWidth={1.9}/>
-            </NavLink>
-          ))}
-        </div>
+        {/* Life button only */}
+        <NavLink to="/life"
+          style={({ isActive }) => ({
+            display:'flex', alignItems:'center', gap:'6px',
+            padding:'7px 14px', borderRadius:'10px',
+            color: isActive ? 'var(--accent)' : '#86868B',
+            background: isActive ? 'rgba(0,113,227,0.1)' : 'rgba(0,0,0,0.05)',
+            textDecoration: 'none', flexShrink: 0,
+            fontSize:'13px', fontWeight:600,
+            transition: 'all 0.15s',
+          })}>
+          <Target size={16} strokeWidth={2}/>
+          Life
+        </NavLink>
       </header>
     )
   }
