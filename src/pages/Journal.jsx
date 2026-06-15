@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import { useIsMobile } from '../hooks/useIsMobile'
 import {
   Plus, Search, X, ChevronDown, Moon,
@@ -230,7 +230,16 @@ export default function Journal() {
   const [activeSection, setActiveSection] = useState(0) // modal section tabs
 
   const today = new Date().toISOString().split('T')[0]
-  const all   = useMemo(()=>[...(data.entries||[])].sort((a,b)=>new Date(b.tanggal)-new Date(a.tanggal)),[data.entries])
+
+  // Normalize corrupted data (e.g. if stored as [] instead of { entries:[] })
+  const safeEntries = Array.isArray(data?.entries) ? data.entries : []
+  useEffect(()=>{
+    if (!data || Array.isArray(data) || !Array.isArray(data.entries)) {
+      setData({ entries: [] })
+    }
+  }, [])
+
+  const all   = useMemo(()=>[...safeEntries].sort((a,b)=>new Date(b.tanggal)-new Date(a.tanggal)),[safeEntries])
   const shown = useMemo(()=>{
     let r=all
     if(tab==='minggu') r=r.filter(e=>e.tanggal>=weekStart())
@@ -243,15 +252,16 @@ export default function Journal() {
   const feelingCounts={}; all.forEach(e=>(e.perasaan||[]).forEach(p=>{feelingCounts[p]=(feelingCounts[p]||0)+1}))
   const topFeeling = Object.entries(feelingCounts).sort((a,b)=>b[1]-a[1])[0]?.[0]||null
 
+  function norm(d){ return Array.isArray(d?.entries) ? d : { entries: [] } }
   function openNew()  { setDraft({...EMPTY,tanggal:today}); setActiveSection(0); setModal('new') }
   function openEdit(e){ setDraft({...e}); setActiveSection(0); setModal('edit') }
   function save() {
     if(!draft.judul?.trim()) return
-    if(draft.id) setData(d=>({...d,entries:d.entries.map(e=>e.id===draft.id?draft:e)}))
-    else setData(d=>({...d,entries:[...(d.entries||[]),{...draft,id:`j_${Date.now()}`}]}))
+    if(draft.id) setData(d=>({...norm(d),entries:norm(d).entries.map(e=>e.id===draft.id?draft:e)}))
+    else setData(d=>({...norm(d),entries:[...norm(d).entries,{...draft,id:`j_${Date.now()}`}]}))
     setModal(null)
   }
-  function del(id){ setData(d=>({...d,entries:d.entries.filter(x=>x.id!==id)})) }
+  function del(id){ setData(d=>({...norm(d),entries:norm(d).entries.filter(x=>x.id!==id)})) }
   function toggleP(l){ setDraft(d=>({...d,perasaan:d.perasaan.includes(l)?d.perasaan.filter(x=>x!==l):[...d.perasaan,l]})) }
   function toggleA(l){ setDraft(d=>({...d,aktivitasPositif:(d.aktivitasPositif||[]).includes(l)?(d.aktivitasPositif||[]).filter(x=>x!==l):[...(d.aktivitasPositif||[]),l]})) }
 
