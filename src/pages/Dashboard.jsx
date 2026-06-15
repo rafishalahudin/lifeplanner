@@ -85,7 +85,7 @@ export default function Dashboard() {
     checklist: [], budget: { total: 0, categories: [] }, guests: [],
   })
   const [tasks, setTasks]   = useLocalStorage('dashboard-tasks', [])
-  const [journal]           = useLocalStorage('journal-v2', [])
+  const [journal]           = useLocalStorage('journal-v2', { entries: [] })
   const [lifePlan]          = useLocalStorage('life-plan', { plans: [], daily: {} })
   const [finance]           = useLocalStorage('finance-v1', { transactions: [] })
   const [weekOffset, setWeekOffset] = useState(0)
