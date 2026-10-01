@@ -10,6 +10,8 @@ import { EXPLAIN, ROLES } from '../data/toeflExplain'
 
 const LETTERS = ['A', 'B', 'C', 'D']
 const MIXED_SIZE = 15
+const SIM_STRUCTURE = 15
+const SIM_WRITTEN = 25
 
 const shuffle = arr => {
   const a = [...arr]
@@ -46,9 +48,13 @@ export default function Toefl() {
   function startLessonQuiz(lesson) {
     setView({ mode: 'quiz', run: Date.now(), source: lesson.id, title: lesson.title, questions: lesson.quiz.map(q => ({ ...q, lessonId: lesson.id })) })
   }
-  function startMixed() {
-    const all = LESSONS.flatMap(l => l.quiz.map(q => ({ ...q, lessonId: l.id })))
-    setView({ mode: 'quiz', run: Date.now(), source: 'mixed', title: 'Latihan Campuran', questions: shuffle(all).slice(0, MIXED_SIZE) })
+  function startMixed(sim = false) {
+    const all = shuffle(LESSONS.flatMap(l => l.quiz.map(q => ({ ...q, lessonId: l.id }))))
+    // Simulasi mengikuti susunan TOEFL ITP: Structure dulu, lalu Written Expression
+    const questions = sim
+      ? [...all.filter(q => q.type === 'structure').slice(0, SIM_STRUCTURE), ...all.filter(q => q.type === 'error').slice(0, SIM_WRITTEN)]
+      : all.slice(0, MIXED_SIZE)
+    setView({ mode: 'quiz', run: Date.now(), source: 'mixed', sim, title: sim ? 'Simulasi TOEFL' : 'Latihan Campuran', questions })
   }
   function saveResult(source, correct, total) {
     const pct = Math.round((correct / total) * 100)
@@ -95,8 +101,11 @@ export default function Toefl() {
                   {label}
                 </button>
               ))}
-              <button onClick={startMixed} style={{ marginLeft: isMobile ? 0 : 'auto', display: 'flex', alignItems: 'center', gap: '7px', padding: '8px 16px', borderRadius: '980px', border: 'none', background: '#5856D6', color: 'white', fontWeight: 700, fontSize: '13px' }}>
+              <button onClick={() => startMixed()} style={{ marginLeft: isMobile ? 0 : 'auto', display: 'flex', alignItems: 'center', gap: '7px', padding: '8px 16px', borderRadius: '980px', border: 'none', background: '#5856D6', color: 'white', fontWeight: 700, fontSize: '13px' }}>
                 <Shuffle size={14} /> Latihan Campuran ({MIXED_SIZE} soal)
+              </button>
+              <button onClick={() => startMixed(true)} style={{ display: 'flex', alignItems: 'center', gap: '7px', padding: '8px 16px', borderRadius: '980px', border: 'none', background: '#FF375F', color: 'white', fontWeight: 700, fontSize: '13px' }}>
+                <Clock size={14} /> Simulasi TOEFL ({SIM_STRUCTURE + SIM_WRITTEN} soal)
               </button>
             </div>
 
@@ -148,7 +157,7 @@ export default function Toefl() {
             {...view}
             onFinish={saveResult}
             onExit={() => setView(view.source === 'mixed' ? { mode: 'home' } : { mode: 'lesson', id: view.source })}
-            onRetry={() => view.source === 'mixed' ? startMixed() : startLessonQuiz(LESSONS.find(l => l.id === view.source))}
+            onRetry={() => view.source === 'mixed' ? startMixed(view.sim) : startLessonQuiz(LESSONS.find(l => l.id === view.source))}
           />
         )}
       </div>

@@ -24,7 +24,9 @@ export const STRATEGY = {
   ],
 }
 
-export const LESSONS = [
+import { EXTRA_QUIZ } from './toeflQuizExtra.js'
+
+const BASE_LESSONS = [
   {
     id: 'subject-verb',
     title: 'Subject & Verb',
@@ -341,3 +343,5 @@ export const LESSONS = [
     ],
   },
 ]
+
+export const LESSONS = BASE_LESSONS.map(l => ({ ...l, quiz: [...l.quiz, ...(EXTRA_QUIZ[l.id] || [])] }))
