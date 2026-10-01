@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom'
-import { LayoutDashboard, Heart, Target, BookOpen, Settings, Wallet, Mail } from 'lucide-react'
+import { LayoutDashboard, Heart, Target, BookOpen, Settings, Wallet, GraduationCap, Mail } from 'lucide-react'
 import { useIsMobile } from '../hooks/useIsMobile'
 
 const NAV = [
@@ -9,6 +9,7 @@ const NAV = [
   { to: '/life',      label: 'Life',      icon: Target          },
   { to: '/journal',   label: 'Journal',   icon: BookOpen        },
   { to: '/finance',   label: 'Finance',   icon: Wallet          },
+  { to: '/toefl',     label: 'TOEFL',     icon: GraduationCap   },
   { to: '/settings',  label: 'Settings',  icon: Settings        },
 ]
 
