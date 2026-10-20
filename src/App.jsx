@@ -9,6 +9,7 @@ import Journal from './pages/Journal'
 import Finance from './pages/Finance'
 import Undangan from './pages/Undangan'
 import Toefl from './pages/Toefl'
+import Konten from './pages/Konten'
 
 export default function App() {
   const location = useLocation()
@@ -27,6 +28,7 @@ export default function App() {
             <Route path="/journal" element={<Journal />} />
             <Route path="/finance" element={<Finance />} />
             <Route path="/toefl" element={<Toefl />} />
+            <Route path="/konten/*" element={<Konten />} />
             <Route path="/undangan" element={<Undangan />} />
             <Route path="/settings" element={<SettingsPage />} />
           </Routes>
