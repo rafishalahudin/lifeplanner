@@ -18,13 +18,13 @@ import { useIsMobile } from './hooks/useIsMobile'
 export default function App() {
   const location = useLocation()
   const isUndangan = location.pathname === '/undangan'
-  const { pengguna, status } = useSinkron()
+  const { pengguna, status, ditolak } = useSinkron()
   const isMobile = useIsMobile()
 
   // Undangan tetap terbuka untuk tamu; halaman lain butuh login. Selama sesi
   // masih dipulihkan, perangkat yang terakhir masuk langsung melihat planner.
   const menungguSesi = status === 'memuat' && pernahMasuk()
-  if (!isUndangan && !pengguna && !menungguSesi) return <Login memuat={status === 'memuat'} />
+  if (!isUndangan && !pengguna && !menungguSesi) return <Login memuat={status === 'memuat'} ditolak={ditolak} />
 
   return (
     <div className={`app-shell${isUndangan ? ' app-shell--undangan' : ''}`}>

@@ -32,6 +32,7 @@ let pengguna = null
 let status = 'memuat' // memuat | keluar | menyinkron | sinkron | menyimpan | galat
 let siap = false      // snapshot cloud pertama sudah diterima
 let berhentiDengar = null
+let ditolak = null    // email akun yang baru saja ditolak Firestore Rules
 
 const diCloud = new Map()   // kunci -> string JSON terakhir yang diketahui ada di cloud
 const antrean = new Map()   // kunci -> { timer, teks }
@@ -132,6 +133,12 @@ function mulaiDengar() {
       }
     },
     (err) => {
+      // Rules hanya mengizinkan akun pemilik; akun lain langsung dikeluarkan.
+      if (err?.code === 'permission-denied') {
+        ditolak = pengguna?.email || 'Akun ini'
+        signOut(auth)
+        return
+      }
       console.error('[sync] gagal mendengar', err)
       setStatus('galat')
     },
@@ -164,6 +171,8 @@ onAuthStateChanged(auth, (u) => {
 })
 
 export async function masuk() {
+  ditolak = null
+  setStatus(status)
   const provider = new GoogleAuthProvider()
   try {
     await signInWithPopup(auth, provider)
@@ -187,9 +196,11 @@ function langganan(fn) {
   return () => pemantauStatus.delete(fn)
 }
 
-let potret = { pengguna, status }
+let potret = { pengguna, status, ditolak }
 function ambil() {
-  if (potret.pengguna !== pengguna || potret.status !== status) potret = { pengguna, status }
+  if (potret.pengguna !== pengguna || potret.status !== status || potret.ditolak !== ditolak) {
+    potret = { pengguna, status, ditolak }
+  }
   return potret
 }
 

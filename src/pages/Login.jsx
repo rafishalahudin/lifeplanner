@@ -13,7 +13,7 @@ function LogoGoogle() {
   )
 }
 
-export default function Login({ memuat }) {
+export default function Login({ memuat, ditolak }) {
   const [proses, setProses] = useState(false)
   const [galat, setGalat] = useState('')
 
@@ -45,6 +45,11 @@ export default function Login({ memuat }) {
           {memuat ? 'Memeriksa sesi…' : proses ? 'Membuka Google…' : 'Masuk dengan Google'}
         </button>
 
+        {ditolak && !proses && (
+          <p className="login-galat" role="alert">
+            {ditolak} tidak punya akses ke planner ini. Masuk dengan akun pemilik.
+          </p>
+        )}
         {galat && <p className="login-galat" role="alert">{galat}</p>}
       </div>
     </div>
