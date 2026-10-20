@@ -1,6 +1,7 @@
 import { NavLink } from 'react-router-dom'
-import { LayoutDashboard, Heart, Target, BookOpen, Settings, Search, Bell, User, Wallet, GraduationCap, TrendingUp, Mail, Clapperboard } from 'lucide-react'
+import { LayoutDashboard, Heart, Target, BookOpen, Settings, Search, Bell, Wallet, GraduationCap, TrendingUp, Mail, Clapperboard } from 'lucide-react'
 import PomodoroTimer from './PomodoroTimer'
+import Akun from './Akun'
 import { useIsMobile } from '../hooks/useIsMobile'
 
 const NAV = [
@@ -45,6 +46,7 @@ export default function TopNav() {
           <Target size={16} strokeWidth={2}/>
           Life
         </NavLink>
+        <Akun />
       </header>
     )
   }
@@ -84,7 +86,7 @@ export default function TopNav() {
           <Bell size={17} strokeWidth={1.8} />
           <div className="nav-badge" />
         </button>
-        <div className="nav-avatar"><User size={16} color="white" strokeWidth={2}/></div>
+        <Akun />
       </div>
     </header>
   )

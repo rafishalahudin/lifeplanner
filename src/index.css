@@ -1159,3 +1159,54 @@ textarea { resize: vertical; min-height: 100px; line-height: 1.7; }
     filter: drop-shadow(0 0 4px rgba(0,113,227,0.25));
   }
 }
+
+/* ── Akun & sinkronisasi ── */
+.akun { position: relative; display: flex; align-items: center; }
+.akun-masuk {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 7px 12px; border-radius: 10px; border: 0;
+  background: var(--accent); color: #fff;
+  font: inherit; font-size: 13px; font-weight: 600; cursor: pointer;
+}
+.akun-masuk:hover:not(:disabled) { background: var(--accent-dark); }
+.akun-masuk:disabled { opacity: 0.6; cursor: default; }
+
+.akun-avatar { position: relative; border: 0; padding: 0; overflow: visible; }
+.akun-avatar img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
+
+.akun-titik {
+  display: inline-block; width: 9px; height: 9px; border-radius: 50%;
+  background: var(--text-muted); flex-shrink: 0;
+}
+.akun-avatar .akun-titik { position: absolute; right: -1px; bottom: -1px; box-shadow: 0 0 0 2px #fff; }
+.akun-titik.sinkron { background: var(--green); }
+.akun-titik.menyimpan, .akun-titik.menyinkron { background: var(--gold); }
+.akun-titik.galat { background: var(--rose); }
+
+.akun-menu {
+  position: absolute; top: calc(100% + 8px); right: 0; z-index: 1100;
+  min-width: 220px; padding: 14px;
+  background: var(--card); border-radius: 14px;
+  box-shadow: var(--shadow-lg); border: 1px solid rgba(0,0,0,0.06);
+}
+.akun-nama { font-weight: 700; font-size: 14px; color: var(--text); }
+.akun-email { font-size: 12.5px; color: var(--text-sec); margin-top: 2px; overflow-wrap: anywhere; }
+.akun-status {
+  display: flex; align-items: center; gap: 7px;
+  margin: 12px 0; padding: 8px 10px; border-radius: 9px;
+  background: var(--border-light); font-size: 12.5px; color: var(--text-sec);
+}
+.akun-status.galat { color: var(--rose); }
+.akun-keluar {
+  width: 100%; display: flex; align-items: center; justify-content: center; gap: 6px;
+  padding: 8px; border-radius: 9px; border: 1px solid var(--border);
+  background: transparent; font: inherit; font-size: 13px; font-weight: 600;
+  color: var(--rose); cursor: pointer;
+}
+.akun-keluar:hover { background: var(--rose-light); }
+
+@media (max-width: 768px) {
+  .topnav-mobile { gap: 8px; }
+  .topnav-mobile > :first-child { margin-right: auto; min-width: 0; }
+  .topnav-mobile .akun-masuk { padding: 7px 10px; }
+}

@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import { PROFIL_AWAL, dataAwal, kontenBaru } from './data.js'
+import { dengarCloud, simpanKeCloud } from '../sync'
 
 const KUNCI = 'rbf-cms-v1'
 
@@ -42,7 +43,11 @@ export function useStore() {
     } catch {
       setGagalSimpan(true)
     }
+    simpanKeCloud(KUNCI, db)
   }, [db])
+
+  // perubahan dari perangkat lain (lewat Firestore)
+  useEffect(() => dengarCloud(KUNCI, (d) => { if (dataSah(d)) setDb(rapikan(d)) }), [])
 
   const tambah = useCallback((awal) => {
     const k = kontenBaru(awal)
