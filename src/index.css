@@ -70,138 +70,84 @@ a { text-decoration: none; color: inherit; }
   min-height: calc(100vh - 24px);
 }
 
-/* ── Top Nav ── */
-.topnav {
-  height: var(--nav-h);
-  background: rgba(255,255,255,0.82);
-  -webkit-backdrop-filter: saturate(180%) blur(20px);
-  backdrop-filter: saturate(180%) blur(20px);
-  border-bottom: 0.5px solid rgba(0,0,0,0.1);
-  display: flex;
-  align-items: center;
-  padding: 0 20px;
-  gap: 0;
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  border-radius: 20px 20px 0 0;
-  flex-shrink: 0;
+/* ── Layout dengan sidebar (desktop) ── */
+.app-container--sidebar {
+  flex-direction: row;
+  height: calc(100vh - 24px);
+  min-height: 0;
 }
+.app-container--sidebar .page-content { min-width: 0; }
 
-.nav-logo {
-  display: flex;
-  align-items: center;
-  gap: 9px;
-  margin-right: 32px;
-  text-decoration: none;
+/* ── Sidebar ── */
+.sidebar {
+  width: 236px; flex-shrink: 0;
+  display: flex; flex-direction: column; gap: 6px;
+  padding: 14px 12px 12px;
+  background: rgba(255,255,255,0.72);
+  border-right: 0.5px solid rgba(0,0,0,0.08);
+  transition: width 0.2s ease;
+  position: relative; z-index: 10; /* menu akun boleh keluar dari sidebar */
 }
+.sidebar--ciut { width: 68px; }
 
-.nav-logo-icon {
-  width: 32px; height: 32px;
+.side-atas { display: flex; align-items: center; gap: 6px; padding: 2px 2px 10px; }
+.side-brand {
+  display: flex; align-items: center; gap: 9px;
+  flex: 1; min-width: 0; text-decoration: none;
+}
+.side-logo {
+  width: 30px; height: 30px; border-radius: 9px; flex-shrink: 0;
   background: var(--accent);
-  border-radius: 8px;
   display: flex; align-items: center; justify-content: center;
-  font-size: 16px;
+}
+.side-judul {
+  font-size: 14.5px; font-weight: 800; letter-spacing: -0.3px; color: var(--text);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.side-ciut {
+  width: 30px; height: 30px; border-radius: 8px; flex-shrink: 0;
+  border: 0; background: transparent; color: var(--text-muted);
+  display: flex; align-items: center; justify-content: center; cursor: pointer;
+}
+.side-ciut:hover { background: rgba(0,0,0,0.05); color: var(--text); }
+
+.side-nav { flex: 1; overflow-y: auto; overflow-x: hidden; display: flex; flex-direction: column; gap: 14px; }
+.side-grup { display: flex; flex-direction: column; gap: 2px; }
+.side-grup-label {
+  padding: 0 10px 4px;
+  font-size: 10.5px; font-weight: 700; letter-spacing: 0.9px; text-transform: uppercase;
+  color: var(--text-muted); white-space: nowrap;
 }
 
-.nav-logo-text {
-  font-size: 20px;
-  font-weight: 700;
-  color: var(--text);
-  letter-spacing: -0.3px;
+.side-link {
+  display: flex; align-items: center; gap: 11px;
+  padding: 8px 10px; border-radius: 9px;
+  font-size: 13.5px; font-weight: 500; color: var(--text-sec);
+  text-decoration: none; white-space: nowrap;
+  transition: background 0.15s, color 0.15s;
 }
+.side-link svg { flex-shrink: 0; }
+.side-link:hover { background: rgba(0,0,0,0.045); color: var(--text); }
+.side-link.active { background: var(--accent-light); color: var(--accent); font-weight: 600; }
 
-.nav-links {
-  display: flex;
-  align-items: center;
-  gap: 2px;
-  flex: 1;
+.side-bawah {
+  display: flex; flex-direction: column; gap: 6px;
+  padding-top: 8px; border-top: 0.5px solid rgba(0,0,0,0.08);
 }
+.side-alat { display: flex; align-items: center; gap: 8px; padding: 4px 2px 0; }
+.side-alat .akun { flex: 1; min-width: 0; }
 
-.nav-link {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 7px 14px;
-  border-radius: 8px;
-  font-size: 13.5px;
-  font-weight: 500;
-  color: var(--text-sec);
-  transition: all 0.15s ease;
-  text-decoration: none;
-  white-space: nowrap;
+/* Mode ciut: hanya ikon */
+.sidebar--ciut .side-atas { flex-direction: column; gap: 8px; }
+.sidebar--ciut .side-brand { flex: none; }
+.sidebar--ciut .side-label { display: none; }
+.sidebar--ciut .side-grup-label {
+  height: 1px; padding: 0; margin: 0 10px 6px;
+  font-size: 0; background: rgba(0,0,0,0.08);
 }
-
-.nav-link:hover {
-  background: rgba(0,0,0,0.05);
-  color: var(--text);
-}
-
-.nav-link.active {
-  background: rgba(0,0,0,0.06);
-  color: var(--text);
-  font-weight: 600;
-}
-
-.nav-link svg { flex-shrink: 0; }
-
-.nav-search {
-  display: flex;
-  align-items: center;
-  gap: 9px;
-  background: rgba(0,0,0,0.06);
-  border: none;
-  border-radius: 10px;
-  padding: 8px 14px;
-  width: 200px;
-  transition: background 0.15s, box-shadow 0.15s;
-}
-
-.nav-search:focus-within {
-  background: rgba(0,0,0,0.04);
-  box-shadow: 0 0 0 3px rgba(0,113,227,0.2);
-}
-
-.nav-search input {
-  border: none;
-  background: transparent;
-  outline: none;
-  font-size: 13.5px;
-  color: var(--text);
-  width: 100%;
-}
-
-.nav-search input::placeholder { color: var(--text-muted); }
-
-.nav-actions {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-left: 16px;
-}
-
-.nav-icon-btn {
-  width: 34px; height: 34px;
-  border-radius: 8px;
-  border: none;
-  background: transparent;
-  display: flex; align-items: center; justify-content: center;
-  color: var(--text-muted);
-  cursor: pointer;
-  transition: all 0.15s;
-  position: relative;
-}
-
-.nav-icon-btn:hover { background: rgba(0,0,0,0.06); color: var(--text); }
-
-.nav-badge {
-  position: absolute;
-  top: 6px; right: 6px;
-  width: 8px; height: 8px;
-  border-radius: 50%;
-  background: var(--accent);
-  border: 2px solid var(--card);
-}
+.sidebar--ciut .side-link { justify-content: center; padding: 9px 0; }
+.sidebar--ciut .side-alat { flex-direction: column; }
+.sidebar--ciut .side-alat .akun { flex: none; }
 
 .nav-avatar {
   width: 32px; height: 32px;
@@ -1062,8 +1008,8 @@ textarea { resize: vertical; min-height: 100px; line-height: 1.7; }
     box-shadow: none;
   }
 
-  /* ── Desktop nav → hidden ── */
-  .topnav { display: none !important; }
+  /* ── Layout HP: scroll jendela, tanpa sidebar ── */
+  .app-container--sidebar { flex-direction: column; height: auto; min-height: 100svh; }
 
   /* ── Mobile top bar (Instagram-style) ── */
   .topnav-mobile {
@@ -1243,3 +1189,73 @@ textarea { resize: vertical; min-height: 100px; line-height: 1.7; }
 .login-google:hover:not(:disabled) { background: #FAFAFC; box-shadow: var(--shadow); }
 .login-google:disabled { opacity: 0.6; cursor: default; }
 .login-galat { margin-top: 14px; font-size: 13px; color: var(--rose); }
+
+/* ── Akun: pemicu, varian sidebar ── */
+.akun-pemicu {
+  display: flex; align-items: center; gap: 10px;
+  min-width: 0; max-width: 100%;
+  padding: 0; border: 0; background: transparent;
+  font: inherit; color: inherit; text-align: left; cursor: pointer;
+}
+.akun--lengkap .akun-pemicu { width: 100%; padding: 6px; margin: -6px; border-radius: 10px; }
+.akun--lengkap .akun-pemicu:hover { background: rgba(0,0,0,0.045); }
+.akun-avatar { flex-shrink: 0; }
+.akun-teks { display: flex; flex-direction: column; min-width: 0; line-height: 1.25; }
+.akun-teks-nama { font-size: 13px; font-weight: 600; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.akun-teks-status { font-size: 11.5px; color: var(--text-muted); white-space: nowrap; }
+
+.akun--atas .akun-menu { top: auto; bottom: calc(100% + 10px); left: 0; right: auto; }
+
+/* ── Bar atas HP ── */
+.topnav-brand {
+  display: flex; align-items: center; gap: 8px; min-width: 0;
+  text-decoration: none; font-size: 15px; font-weight: 800; letter-spacing: -0.3px; color: var(--text);
+  white-space: nowrap;
+}
+.topnav-brand > span:last-child { overflow: hidden; text-overflow: ellipsis; }
+.topnav-brand .side-logo { width: 28px; height: 28px; border-radius: 8px; }
+
+/* ── Navigasi bawah: tombol Lainnya & lembar menu ── */
+button.bottom-nav-item { border: 0; background: transparent; font: inherit; cursor: pointer; padding: 0; }
+
+.lembar-latar {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 999;
+  bottom: calc(58px + env(safe-area-inset-bottom, 0px)); /* tepat di atas navigasi bawah */
+  background: rgba(0,0,0,0.28);
+  display: flex; align-items: flex-end;
+  animation: lembar-pudar 0.18s ease;
+}
+.lembar {
+  width: 100%;
+  padding: 14px 16px 16px;
+  background: var(--card); border-radius: 20px 20px 0 0;
+  box-shadow: 0 -8px 32px rgba(0,0,0,0.12);
+  animation: lembar-naik 0.22s ease;
+}
+.lembar-kepala {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 2px 12px; font-size: 13px; font-weight: 700; color: var(--text-sec);
+}
+.lembar-tutup {
+  width: 32px; height: 32px; border-radius: 50%; border: 0;
+  background: var(--border-light); color: var(--text-sec);
+  display: flex; align-items: center; justify-content: center; cursor: pointer;
+}
+.lembar-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.lembar-item {
+  display: flex; flex-direction: column; align-items: center; gap: 7px;
+  padding: 14px 6px; border-radius: 14px;
+  background: var(--bg); color: var(--text);
+  font-size: 12.5px; font-weight: 600; text-decoration: none;
+}
+.lembar-ikon {
+  width: 40px; height: 40px; border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--card); color: var(--text-sec);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+}
+.lembar-item.active { background: var(--accent-light); color: var(--accent); }
+.lembar-item.active .lembar-ikon { color: var(--accent); }
+
+@keyframes lembar-naik { from { transform: translateY(24px); opacity: 0.6; } to { transform: none; opacity: 1; } }
+@keyframes lembar-pudar { from { opacity: 0; } to { opacity: 1; } }

@@ -10,7 +10,7 @@ const LABEL_STATUS = {
   galat:      'Gagal sinkron, cek koneksi',
 }
 
-export default function Akun() {
+export default function Akun({ arah = 'bawah', lengkap = false }) {
   const { pengguna, status } = useSinkron()
   const [buka, setBuka] = useState(false)
   const [galat, setGalat] = useState('')
@@ -48,13 +48,21 @@ export default function Akun() {
   const nama = pengguna.displayName || pengguna.email || 'Akun'
 
   return (
-    <div className="akun" ref={ref}>
-      <button className="nav-avatar akun-avatar" onClick={() => setBuka((b) => !b)}
+    <div className={`akun akun--${arah}${lengkap ? ' akun--lengkap' : ''}`} ref={ref}>
+      <button className="akun-pemicu" onClick={() => setBuka((b) => !b)}
               aria-label={`Akun ${nama}, ${LABEL_STATUS[status] ?? ''}`} aria-expanded={buka}>
-        {pengguna.photoURL
-          ? <img src={pengguna.photoURL} alt="" referrerPolicy="no-referrer" />
-          : <User size={16} color="white" strokeWidth={2} />}
-        <span className={`akun-titik ${status}`} />
+        <span className="nav-avatar akun-avatar">
+          {pengguna.photoURL
+            ? <img src={pengguna.photoURL} alt="" referrerPolicy="no-referrer" />
+            : <User size={16} color="white" strokeWidth={2} />}
+          <span className={`akun-titik ${status}`} />
+        </span>
+        {lengkap && (
+          <span className="akun-teks">
+            <span className="akun-teks-nama">{nama}</span>
+            <span className="akun-teks-status">{LABEL_STATUS[status] ?? status}</span>
+          </span>
+        )}
       </button>
 
       {buka && (

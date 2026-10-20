@@ -1,6 +1,7 @@
 import { Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import { Settings } from 'lucide-react'
 import TopNav from './components/TopNav'
+import Sidebar from './components/Sidebar'
 import BottomNav from './components/BottomNav'
 import Dashboard from './pages/Dashboard'
 import WeddingPlanner from './pages/WeddingPlanner'
@@ -12,19 +13,21 @@ import Toefl from './pages/Toefl'
 import Konten from './pages/Konten'
 import Login from './pages/Login'
 import { useSinkron } from './sync'
+import { useIsMobile } from './hooks/useIsMobile'
 
 export default function App() {
   const location = useLocation()
   const isUndangan = location.pathname === '/undangan'
   const { pengguna, status } = useSinkron()
+  const isMobile = useIsMobile()
 
   // Undangan tetap terbuka untuk tamu; halaman lain butuh login.
   if (!isUndangan && !pengguna) return <Login memuat={status === 'memuat'} />
 
   return (
     <div className={`app-shell${isUndangan ? ' app-shell--undangan' : ''}`}>
-      <div className="app-container">
-        {!isUndangan && <TopNav />}
+      <div className={`app-container${isUndangan ? '' : ' app-container--sidebar'}`}>
+        {!isUndangan && (isMobile ? <TopNav /> : <Sidebar />)}
         <div className={`page-content${isUndangan ? ' page-content--undangan' : ''}`}>
           <Routes>
             <Route path="/" element={<Navigate to="/dashboard" replace />} />
@@ -39,7 +42,7 @@ export default function App() {
             <Route path="/settings" element={<SettingsPage />} />
           </Routes>
         </div>
-        {!isUndangan && <BottomNav />}
+        {!isUndangan && isMobile && <BottomNav />}
       </div>
     </div>
   )

@@ -1,51 +1,59 @@
 import { NavLink } from 'react-router-dom'
-import {
-  LayoutDashboard, Heart, Target, BookOpen, Flower2
-} from 'lucide-react'
+import { PanelLeftClose, PanelLeftOpen, TrendingUp } from 'lucide-react'
+import { useLocalStorage } from '../hooks/useLocalStorage'
+import { GRUP_NAV, NAV_SETTINGS } from './navigasi'
+import PomodoroTimer from './PomodoroTimer'
+import Akun from './Akun'
 
-const nav = [
-  { to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-  { to: '/wedding', label: 'Wedding', icon: Heart },
-  { to: '/life', label: 'Life Planner', icon: Target },
-  { to: '/journal', label: 'Journal', icon: BookOpen },
-]
+function Item({ to, label, icon: Icon, ciut }) {
+  return (
+    <NavLink
+      to={to}
+      title={ciut ? label : undefined}
+      className={({ isActive }) => `side-link${isActive ? ' active' : ''}`}
+    >
+      <Icon size={18} strokeWidth={1.9} />
+      <span className="side-label">{label}</span>
+    </NavLink>
+  )
+}
 
 export default function Sidebar() {
-  const today = new Date()
-  const dateStr = today.toLocaleDateString('en-US', {
-    weekday: 'long', month: 'long', day: 'numeric'
-  })
+  const [ciut, setCiut] = useLocalStorage('nav-ciut', false)
 
   return (
-    <aside className="sidebar">
-      <div className="sidebar-logo">
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <Flower2 size={22} color="var(--accent)" strokeWidth={1.5} />
-          <h1 style={{ fontSize: '24px', fontFamily: "'Inter', sans-serif", color: 'var(--accent)', fontWeight: 700, letterSpacing: '-0.5px' }}>
-            Rafi
-          </h1>
-        </div>
-        <p className="sidebar-logo-sub" style={{ fontSize: '10px', color: 'rgba(255,255,255,0.25)', letterSpacing: '2px', textTransform: 'uppercase', marginTop: '4px', fontFamily: "'Inter', sans-serif" }}>
-          Your Personal Planner
-        </p>
+    <aside className={`sidebar${ciut ? ' sidebar--ciut' : ''}`} aria-label="Navigasi utama">
+      <div className="side-atas">
+        <NavLink to="/dashboard" className="side-brand" title="Rafi's Life Planner">
+          <span className="side-logo"><TrendingUp size={15} color="white" strokeWidth={2.5} /></span>
+          <span className="side-label side-judul">Rafi's Life Planner</span>
+        </NavLink>
+        <button
+          type="button"
+          className="side-ciut"
+          onClick={() => setCiut((c) => !c)}
+          aria-label={ciut ? 'Lebarkan sidebar' : 'Ciutkan sidebar'}
+          title={ciut ? 'Lebarkan' : 'Ciutkan'}
+        >
+          {ciut ? <PanelLeftOpen size={17} /> : <PanelLeftClose size={17} />}
+        </button>
       </div>
 
-      <nav className="sidebar-nav">
-        {nav.map(({ to, label, icon: Icon }) => (
-          <NavLink
-            key={to}
-            to={to}
-            className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
-          >
-            <Icon size={17} strokeWidth={1.75} />
-            {label}
-          </NavLink>
+      <nav className="side-nav">
+        {GRUP_NAV.map((g) => (
+          <div className="side-grup" key={g.label}>
+            <div className="side-grup-label">{g.label}</div>
+            {g.items.map((it) => <Item key={it.to} {...it} ciut={ciut} />)}
+          </div>
         ))}
       </nav>
 
-      <div className="sidebar-footer">
-        <div className="sidebar-date">Today</div>
-        <div className="sidebar-today">{dateStr}</div>
+      <div className="side-bawah">
+        <Item {...NAV_SETTINGS} ciut={ciut} />
+        <div className="side-alat">
+          <Akun arah="atas" lengkap={!ciut} />
+          <PomodoroTimer />
+        </div>
       </div>
     </aside>
   )
