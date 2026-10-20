@@ -12,7 +12,7 @@ import Undangan from './pages/Undangan'
 import Toefl from './pages/Toefl'
 import Konten from './pages/Konten'
 import Login from './pages/Login'
-import { useSinkron } from './sync'
+import { pernahMasuk, useSinkron } from './sync'
 import { useIsMobile } from './hooks/useIsMobile'
 
 export default function App() {
@@ -21,8 +21,10 @@ export default function App() {
   const { pengguna, status } = useSinkron()
   const isMobile = useIsMobile()
 
-  // Undangan tetap terbuka untuk tamu; halaman lain butuh login.
-  if (!isUndangan && !pengguna) return <Login memuat={status === 'memuat'} />
+  // Undangan tetap terbuka untuk tamu; halaman lain butuh login. Selama sesi
+  // masih dipulihkan, perangkat yang terakhir masuk langsung melihat planner.
+  const menungguSesi = status === 'memuat' && pernahMasuk()
+  if (!isUndangan && !pengguna && !menungguSesi) return <Login memuat={status === 'memuat'} />
 
   return (
     <div className={`app-shell${isUndangan ? ' app-shell--undangan' : ''}`}>

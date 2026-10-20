@@ -1259,3 +1259,4 @@ button.bottom-nav-item { border: 0; background: transparent; font: inherit; curs
 
 @keyframes lembar-naik { from { transform: translateY(24px); opacity: 0.6; } to { transform: none; opacity: 1; } }
 @keyframes lembar-pudar { from { opacity: 0; } to { opacity: 1; } }
+.akun-avatar--memuat { background: var(--border-light); }

@@ -33,6 +33,14 @@ export default function Akun({ arah = 'bawah', lengkap = false }) {
     }
   }
 
+  if (!pengguna && status === 'memuat') {
+    return (
+      <div className={`akun akun--${arah}`}>
+        <span className="nav-avatar akun-avatar akun-avatar--memuat" aria-label="Memuat akun" />
+      </div>
+    )
+  }
+
   if (!pengguna) {
     return (
       <div className="akun" ref={ref}>

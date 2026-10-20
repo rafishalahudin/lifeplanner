@@ -138,7 +138,21 @@ function mulaiDengar() {
   )
 }
 
+/* Firebase butuh sesaat untuk memulihkan sesi saat halaman dimuat. Petunjuk
+   ini mencatat bahwa perangkat ini terakhir dalam keadaan masuk, supaya
+   aplikasi bisa langsung tampil tanpa sempat memperlihatkan halaman login.
+   Hanya memengaruhi tampilan; akses data tetap dijaga Firestore Rules. */
+const PETUNJUK = 'auth-petunjuk'
+
+export function pernahMasuk() {
+  try { return localStorage.getItem(PETUNJUK) === '1' } catch { return false }
+}
+
 onAuthStateChanged(auth, (u) => {
+  try {
+    if (u) localStorage.setItem(PETUNJUK, '1')
+    else localStorage.removeItem(PETUNJUK)
+  } catch {}
   berhentiDengar?.()
   berhentiDengar = null
   antrean.forEach(({ timer }) => clearTimeout(timer))
