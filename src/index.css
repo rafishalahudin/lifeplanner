@@ -1210,3 +1210,36 @@ textarea { resize: vertical; min-height: 100px; line-height: 1.7; }
   .topnav-mobile > :first-child { margin-right: auto; min-width: 0; }
   .topnav-mobile .akun-masuk { padding: 7px 10px; }
 }
+
+/* ── Halaman login ── */
+.login-layar {
+  min-height: 100vh; min-height: 100svh;
+  display: grid; place-items: center;
+  padding: 24px 16px;
+  background: var(--bg);
+}
+.login-kartu {
+  width: 100%; max-width: 380px;
+  padding: 36px 28px 30px;
+  background: var(--card); border-radius: 20px;
+  box-shadow: var(--shadow-lg); border: 1px solid rgba(0,0,0,0.05);
+  text-align: center;
+}
+.login-logo {
+  width: 52px; height: 52px; margin: 0 auto 18px;
+  border-radius: 15px; background: var(--accent);
+  display: flex; align-items: center; justify-content: center;
+}
+.login-judul { font-size: 22px; font-weight: 800; letter-spacing: -0.4px; color: var(--text); }
+.login-sub { margin-top: 8px; font-size: 13.5px; line-height: 1.55; color: var(--text-sec); }
+.login-google {
+  width: 100%; margin-top: 26px;
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  padding: 12px 16px; border-radius: 12px;
+  border: 1px solid var(--border); background: #fff;
+  font: inherit; font-size: 14.5px; font-weight: 600; color: var(--text);
+  cursor: pointer; transition: background 0.15s, box-shadow 0.15s;
+}
+.login-google:hover:not(:disabled) { background: #FAFAFC; box-shadow: var(--shadow); }
+.login-google:disabled { opacity: 0.6; cursor: default; }
+.login-galat { margin-top: 14px; font-size: 13px; color: var(--rose); }

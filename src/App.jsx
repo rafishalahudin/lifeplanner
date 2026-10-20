@@ -10,10 +10,16 @@ import Finance from './pages/Finance'
 import Undangan from './pages/Undangan'
 import Toefl from './pages/Toefl'
 import Konten from './pages/Konten'
+import Login from './pages/Login'
+import { useSinkron } from './sync'
 
 export default function App() {
   const location = useLocation()
   const isUndangan = location.pathname === '/undangan'
+  const { pengguna, status } = useSinkron()
+
+  // Undangan tetap terbuka untuk tamu; halaman lain butuh login.
+  if (!isUndangan && !pengguna) return <Login memuat={status === 'memuat'} />
 
   return (
     <div className={`app-shell${isUndangan ? ' app-shell--undangan' : ''}`}>
